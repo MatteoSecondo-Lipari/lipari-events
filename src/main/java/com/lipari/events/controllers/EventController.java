@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lipari.events.models.EventDTO;
+import com.lipari.events.models.constraints.EventConstraintsDTO;
 import com.lipari.events.services.EventService;
 
 import jakarta.validation.Valid;
@@ -20,9 +20,10 @@ public class EventController {
 	@Autowired
 	EventService eventService;
 
+	//TODO: Bisogna ricevere nella richiesta anche una immagine di copertina
 	@PreAuthorize("hasAnyRole('ROLE_ENTERTAINER','ROLE_ADMIN')")
 	@PostMapping("/save")
-	public ResponseEntity<?> createOrUpdate(@RequestBody @Valid EventDTO event) {
+	public ResponseEntity<?> createOrUpdate(@RequestBody @Valid EventConstraintsDTO event) {
 		return ResponseEntity.ok(eventService.createOrUpdateEvent(event));
 	}
 	

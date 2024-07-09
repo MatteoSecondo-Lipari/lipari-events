@@ -2,8 +2,6 @@ package com.lipari.events.models;
 
 import java.time.LocalDate;
 
-import com.lipari.events.entities.EGender;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

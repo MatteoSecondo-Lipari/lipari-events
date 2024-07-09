@@ -1,7 +1,5 @@
 package com.lipari.events.models;
 
-import com.lipari.events.models.UserDTO;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,14 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+public class LocationDTO {
 
-	private long id;
+	private int id;
 	
-	private String email;
-
-	public UserDTO(long id) {
-		super();
-		this.id = id;
-	}
+	private String citta;
 }

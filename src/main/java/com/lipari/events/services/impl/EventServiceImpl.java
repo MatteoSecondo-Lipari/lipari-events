@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.lipari.events.entities.EventEntity;
 import com.lipari.events.mappers.EventMapper;
 import com.lipari.events.models.EventDTO;
+import com.lipari.events.models.constraints.EventConstraintsDTO;
 import com.lipari.events.repositories.EventRepository;
 import com.lipari.events.services.EventService;
 
@@ -21,8 +22,8 @@ public class EventServiceImpl implements EventService {
 	EventMapper eventMapper;
 
 	@Override
-	public EventDTO createOrUpdateEvent(EventDTO event) {
-		EventEntity ee = eventMapper.dtoToEntity(event);
+	public EventDTO createOrUpdateEvent(EventConstraintsDTO event) {
+		EventEntity ee = eventMapper.constraintsDtoToEntity(event);
 		return eventMapper.entityToDto(eventRepository.save(ee));
 	}
 

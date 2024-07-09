@@ -3,6 +3,7 @@ package com.lipari.events.entities;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -34,17 +35,18 @@ public class EventEntity {
 	@NotBlank(message = "Must be not null must and contain at least one non-whitespace character")
 	private String name;
 	
-	@NotBlank(message = "Must be not null must and contain at least one non-whitespace character")
-	private String location;
-	
 	@Future(message = "Must be a future date")
 	private LocalDate date;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "category_id")
-	private EventCategoryEntity category;
+	@JoinColumn(name = "location_id")
+	private LocationEntity location;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "event")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "subcategory_id", nullable = false)
+	private EventSubcategoryEntity subcategory;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "event", cascade = CascadeType.REMOVE)
 	private List<TicketEntity> tickets;
 	
 	@ManyToMany(fetch = FetchType.LAZY)

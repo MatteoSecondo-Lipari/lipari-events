@@ -1,9 +1,9 @@
-package com.lipari.events.entities;
+package com.lipari.events.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.lipari.events.exceptions.ECategoryDeserializer;
+import com.lipari.events.exceptions.EnumDeserializer;
 
-@JsonDeserialize(using = ECategoryDeserializer.class)
+@JsonDeserialize(using = EnumDeserializer.class)
 public enum ECategory {
 	CONCERT,
 	THEATRE,

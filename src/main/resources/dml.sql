@@ -9,3 +9,9 @@ insert into event_subcategories (name, category_id) values
 ("Film", 5),
 ("Summary", 6),
 ("Circus", 7), ("Exhibitions", 7), ("Theme parks", 7), ("Other", 7);
+
+insert into locations (citta) values  ("Ancona"), ("Bari"), ("Bergamo"), ("Bologna"), ("Caserta"),
+("Catania"), ("Ferrara"), ("Firenze"), ("Forlì"), ("Genova"), ("Lucca"), ("Milano"), ("Misano"), ("Monza"),
+("Napoli"), ("Padova"), ("Palermo"), ("Parma"), ("Pescara"), ("Piacenza"), ("Reggio Calabria"),
+("Reggio Emilia"), ("Roma"), ("Siena"), ("Torino"), ("Trento"), ("Trieste"), ("Udine"),
+("Varese"), ("Venezia"), ("Verona");

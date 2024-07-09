@@ -15,9 +15,9 @@ public class EventDTO {
 	
 	private String name;
 	
-	private String location;
-	
 	private LocalDate date;
 	
-	private EventCategoryDTO category;
+	private LocationDTO location;
+	
+	private EventSubcategoryDTO subcategory;
 }

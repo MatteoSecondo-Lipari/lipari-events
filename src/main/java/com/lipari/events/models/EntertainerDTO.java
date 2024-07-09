@@ -13,5 +13,7 @@ public class EntertainerDTO {
 
 	private String stageName;
 	
+	private String type;
+	
 	private UserDTO user;
 }

@@ -30,6 +30,9 @@ public class EntertainerEntity {
 	@NotBlank(message = "Must be not null and must contain at least one non-whitespace character")
 	private String stageName;
 	
+	@NotBlank(message = "Must be not null and must contain at least one non-whitespace character")
+	private String type;
+	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)
 	private UserEntity user;

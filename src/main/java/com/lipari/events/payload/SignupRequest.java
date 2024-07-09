@@ -2,9 +2,10 @@ package com.lipari.events.payload;
 
 import java.util.Set;
 
-import com.lipari.events.models.CustomerDTO;
-import com.lipari.events.models.EntertainerDTO;
+import com.lipari.events.models.constraints.CustomerConstraintsDTO;
+import com.lipari.events.models.constraints.EntertainerConstraintsDTO;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -24,6 +25,9 @@ public class SignupRequest {
 	
 	private Set<String> roles;
 	
-	private CustomerDTO customer;
-	private EntertainerDTO entertainer;
+	@Valid
+	private CustomerConstraintsDTO customer;
+	
+	@Valid
+	private EntertainerConstraintsDTO entertainer;
 }

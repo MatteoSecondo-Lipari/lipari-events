@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -20,7 +22,7 @@ public class ValidationExceptionHandler {
 		
 		final Map<String, Object> body = new HashMap<>();
 
-		body.put("status", HttpStatus.BAD_REQUEST);
+		body.put("status", HttpStatus.BAD_REQUEST.value());
 	    body.put("error", "Bad Request");
 		
         for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
@@ -29,6 +31,21 @@ public class ValidationExceptionHandler {
         
         return body;
 	}
+	
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        final Map<String, Object> body = new HashMap<>();
+
+        body.put("status", HttpStatus.BAD_REQUEST.value());
+        body.put("error", "Bad Request");
+
+        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+            body.put(error.getField(), error.getDefaultMessage());
+        }
+
+        return body;
+    }
 	
 	@ExceptionHandler(CustomJsonParseException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

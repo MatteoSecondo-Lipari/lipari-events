@@ -33,6 +33,8 @@ import com.lipari.events.security.user_details.UserDetailsImpl;
 import com.lipari.events.services.CustomerService;
 import com.lipari.events.services.EntertainerService;
 
+import jakarta.validation.Valid;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/auth")
@@ -77,7 +79,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/register")
-	public ResponseEntity<?> register(@RequestBody SignupRequest signupRequest) {
+	public ResponseEntity<?> register(@RequestBody @Valid SignupRequest signupRequest) {
 		if (userRepository.existsByEmail(signupRequest.getEmail())) {
 			return ResponseEntity
 					.badRequest()

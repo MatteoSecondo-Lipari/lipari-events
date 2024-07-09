@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.lipari.events.entities.CustomerEntity;
 import com.lipari.events.mappers.CustomerMapper;
 import com.lipari.events.models.CustomerDTO;
+import com.lipari.events.models.constraints.CustomerConstraintsDTO;
 import com.lipari.events.repositories.CustomerRepository;
 import com.lipari.events.services.CustomerService;
 
@@ -21,8 +22,8 @@ public class CustomerServiceImpl implements CustomerService {
 	CustomerMapper customerMapper;
 
 	@Override
-	public CustomerDTO createOrUpdateCustomer(CustomerDTO customer) {
-		CustomerEntity ce = customerMapper.dtoToEntity(customer);
+	public CustomerDTO createOrUpdateCustomer(CustomerConstraintsDTO customer) {
+		CustomerEntity ce = customerMapper.constraintsDtoToEntity(customer);
 		return customerMapper.entityToDto(customerRepository.save(ce));
 	}
 
