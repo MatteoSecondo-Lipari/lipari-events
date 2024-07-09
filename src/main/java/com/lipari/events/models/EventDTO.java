@@ -2,8 +2,6 @@ package com.lipari.events.models;
 
 import java.time.LocalDate;
 
-import com.lipari.events.entities.ECategory;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +17,7 @@ public class EventDTO {
 	
 	private String location;
 	
-	private ECategory category;
-	
 	private LocalDate date;
+	
+	private EventCategoryDTO category;
 }

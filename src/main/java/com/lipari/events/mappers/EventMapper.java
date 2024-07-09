@@ -8,7 +8,7 @@ import com.lipari.events.models.EventDTO;
 @Mapper(componentModel = "spring")
 public interface EventMapper {
 
-public EventDTO entityToDto(EventEntity entity);
+	public EventDTO entityToDto(EventEntity entity);
 	
 	public EventEntity dtoToEntity(EventDTO dto);
 }
