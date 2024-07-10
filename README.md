@@ -1,10 +1,14 @@
-Funzioni da implementare:
-  •	Sezione cliente
-  1.	Ricerca eventi tramite artista, nome evento, città, o categoria
-  2.	Scelta tipo biglietto
-  3.	Eventuale scelta posto numerato
-  4.	Acquisto biglietto
-  •	Sezione artista/personaggio
-  1.	Creazione evento
-  2.	Eventuale dashboard
-  •	Sezione admin
+#Funzioni da implementare
+
+##Sezione cliente
+* Ricerca eventi tramite artista, nome evento, città, o categoria
+* Scelta tipo biglietto
+* Eventuale scelta posto numerato
+* Acquisto biglietto
+
+##Sezione artista/personaggio
+* Creazione evento
+* Eventuale dashboard
+
+##Sezione admin
+* Tutte le funzioni di tipo admin che sembra utile implementare
