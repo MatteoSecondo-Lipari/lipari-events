@@ -17,6 +17,8 @@ public class EventDTO {
 	
 	private LocalDate date;
 	
+	private String imagePath;
+	
 	private LocationDTO location;
 	
 	private EventSubcategoryDTO subcategory;

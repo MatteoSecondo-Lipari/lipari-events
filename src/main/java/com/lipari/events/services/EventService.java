@@ -7,7 +7,7 @@ import com.lipari.events.models.constraints.EventConstraintsDTO;
 
 public interface EventService {
 
-	public EventDTO createOrUpdateEvent(EventConstraintsDTO event);
+	public EventDTO createOrUpdateEvent(EventConstraintsDTO event, String imagePath);
 	
 	public List<EventDTO> getAllEvents();
 	public EventDTO getEventById(long id);

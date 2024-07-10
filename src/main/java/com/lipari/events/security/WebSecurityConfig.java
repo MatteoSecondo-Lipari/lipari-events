@@ -66,6 +66,7 @@ public class WebSecurityConfig {
 			.exceptionHandling(exception -> exception.accessDeniedHandler(accessDeniedHandler))
 			.authorizeHttpRequests(auth ->
 				auth.requestMatchers("/auth/**").permitAll()
+					.requestMatchers("/event/*/image").permitAll()
 					.anyRequest().authenticated()
 			);
 		

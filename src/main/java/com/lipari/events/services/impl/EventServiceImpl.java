@@ -22,8 +22,13 @@ public class EventServiceImpl implements EventService {
 	EventMapper eventMapper;
 
 	@Override
-	public EventDTO createOrUpdateEvent(EventConstraintsDTO event) {
+	public EventDTO createOrUpdateEvent(EventConstraintsDTO event, String imagePath) {
 		EventEntity ee = eventMapper.constraintsDtoToEntity(event);
+		
+		if(imagePath != null) {
+			ee.setImagePath(imagePath);
+		}
+		
 		return eventMapper.entityToDto(eventRepository.save(ee));
 	}
 
@@ -35,8 +40,7 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public EventDTO getEventById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return eventMapper.entityToDto(eventRepository.findById(id).orElseThrow());
 	}
 
 }
