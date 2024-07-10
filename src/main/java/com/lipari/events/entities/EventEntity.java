@@ -38,6 +38,8 @@ public class EventEntity {
 	@Future(message = "Must be a future date")
 	private LocalDate date;
 	
+	private String imagePath;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "location_id")
 	private LocationEntity location;
