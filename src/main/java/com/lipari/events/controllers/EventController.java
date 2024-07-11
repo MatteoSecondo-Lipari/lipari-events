@@ -81,7 +81,7 @@ public class EventController {
         	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
             		new MessageResponse("Event not existing", HttpStatus.NOT_FOUND.value()));
         } catch (Exception e) {
-        	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
             		new MessageResponse("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR.value()));
         }
     }
