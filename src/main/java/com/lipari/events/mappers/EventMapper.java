@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 
 import com.lipari.events.entities.EventEntity;
 import com.lipari.events.models.EventDTO;
+import com.lipari.events.models.EventWithoutSubcategoryDTO;
 import com.lipari.events.models.constraints.EventConstraintsDTO;
 
 @Mapper(componentModel = "spring")
@@ -16,4 +17,8 @@ public interface EventMapper {
 	public EventConstraintsDTO entityToConstraintsDto(EventEntity entity);
 	
 	public EventEntity constraintsDtoToEntity(EventConstraintsDTO dto);
+	
+	public EventWithoutSubcategoryDTO entityToDtoWithoutSubcategory(EventEntity entity);
+	
+	public EventEntity dtoWithoutSubcategoryToEntity(EventWithoutSubcategoryDTO dto);
 }
