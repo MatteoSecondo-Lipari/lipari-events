@@ -1,5 +1,7 @@
 package com.lipari.events.models;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,5 +15,6 @@ public class EventCategoryDTO {
 	
 	private String name;
 	
-	private EventSubcategoryDTO subcategory;
+	private List<EventSubcategoryDTO> subcategories;
+	
 }
