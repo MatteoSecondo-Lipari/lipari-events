@@ -15,3 +15,5 @@ insert into locations (citta) values  ("Ancona"), ("Bari"), ("Bergamo"), ("Bolog
 ("Napoli"), ("Padova"), ("Palermo"), ("Parma"), ("Pescara"), ("Piacenza"), ("Reggio Calabria"),
 ("Reggio Emilia"), ("Roma"), ("Siena"), ("Torino"), ("Trento"), ("Trieste"), ("Udine"),
 ("Varese"), ("Venezia"), ("Verona");
+
+insert into event (name, date, imagePath)
