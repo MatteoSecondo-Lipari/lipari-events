@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LocationDTO {
+public class LocationWithEventsDTO {
 
 	private int id;
 	
 	private String city;
 	
-	
+	private List<EventWithoutLocationDTO> events;
 }

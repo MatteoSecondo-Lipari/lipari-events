@@ -10,13 +10,13 @@ insert into event_subcategories (name, category_id) values
 ("Summary", 6),
 ("Circus", 7), ("Exhibitions", 7), ("Theme parks", 7), ("Other", 7);
 
-insert into locations (citta) values  ("Ancona"), ("Bari"), ("Bergamo"), ("Bologna"), ("Caserta"),
+insert into locations (city) values  ("Ancona"), ("Bari"), ("Bergamo"), ("Bologna"), ("Caserta"),
 ("Catania"), ("Ferrara"), ("Firenze"), ("Forlì"), ("Genova"), ("Lucca"), ("Milano"), ("Misano"), ("Monza"),
 ("Napoli"), ("Padova"), ("Palermo"), ("Parma"), ("Pescara"), ("Piacenza"), ("Reggio Calabria"),
 ("Reggio Emilia"), ("Roma"), ("Siena"), ("Torino"), ("Trento"), ("Trieste"), ("Udine"),
 ("Varese"), ("Venezia"), ("Verona");
 
-INSERT INTO event (name, date, imagePath, subcategory_id, location_id) VALUES
+INSERT INTO events (name, date, image_Path, subcategory_id, location_id) VALUES
 ("Rock Concert", '2024-08-15', 'path/to/rock_concert.jpg', 1, 12),
 ("Jazz Night", '2024-07-20', 'path/to/jazz_night.jpg', 3, 22),
 ("Soccer Match", '2024-09-10', 'path/to/soccer_match.jpg', 13, 25),
