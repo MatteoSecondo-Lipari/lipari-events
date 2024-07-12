@@ -17,6 +17,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,8 +41,14 @@ public class EventEntity {
 	
 	private String imagePath;
 	
+	@NotNull(message = "Must be not null")
+	private float ticketPrice;
+	
+	@NotNull(message = "Must be not null")
+	private float numberedTicketPrice;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "location_id")
+	@JoinColumn(name = "location_id", nullable = false)
 	private LocationEntity location;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

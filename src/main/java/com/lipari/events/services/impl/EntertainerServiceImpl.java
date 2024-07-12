@@ -41,7 +41,7 @@ public class EntertainerServiceImpl implements EntertainerService {
 
 	@Override
 	public List<EntertainerDTO> getEntertainerByStageName(String stageName) {
-		return entertainerRepository.getByStageNameContains(stageName).stream()
+		return entertainerRepository.getByStageNameStartingWith(stageName).stream()
 				.map(entertainerMapper::entityToDto).toList();
 	}
 
