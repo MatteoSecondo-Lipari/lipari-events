@@ -67,6 +67,7 @@ public class WebSecurityConfig {
 			.authorizeHttpRequests(auth ->
 				auth.requestMatchers("/auth/**").permitAll()
 					.requestMatchers("/event/*/image").permitAll()
+					.requestMatchers("/entertainer/stage-name/**").permitAll()
 					.anyRequest().authenticated()
 			);
 		

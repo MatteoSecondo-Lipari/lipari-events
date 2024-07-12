@@ -8,8 +8,8 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.lipari.events.models.ECategory;
 
-public class EnumDeserializer extends JsonDeserializer<ECategory>{
-
+public class ECategoryDeserializer extends JsonDeserializer<ECategory>{
+	
 	@Override
 	public ECategory deserialize(JsonParser p, DeserializationContext ctxt)
 			throws IOException, JacksonException {
@@ -24,5 +24,4 @@ public class EnumDeserializer extends JsonDeserializer<ECategory>{
         }
 	}
 
-	
 }

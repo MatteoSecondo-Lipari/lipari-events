@@ -1,9 +1,9 @@
 package com.lipari.events.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.lipari.events.exceptions.EnumDeserializer;
+import com.lipari.events.exceptions.ERoleDeserializer;
 
-@JsonDeserialize(using = EnumDeserializer.class)
+@JsonDeserialize(using = ERoleDeserializer.class)
 public enum ERole {
 	ROLE_ADMIN,
 	ROLE_ENTERTAINER,

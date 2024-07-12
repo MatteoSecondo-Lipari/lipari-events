@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,8 +40,11 @@ public class EventController {
 
 	@PreAuthorize("hasAnyRole('ROLE_ENTERTAINER','ROLE_ADMIN')")
 	@PostMapping(path = "/save", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-	public ResponseEntity<?> createOrUpdate(@RequestPart MultipartFile image,
+	public ResponseEntity<?> createOrUpdate(
+			@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
+			@RequestPart MultipartFile image,
 			@RequestPart @Valid EventConstraintsDTO event) {
+		
 		String path = null;
 		boolean isValid = image.getContentType() == null || (image.getContentType().equals("image/jpeg") ||
 				image.getContentType().equals("image/jpg"));
@@ -58,7 +62,7 @@ public class EventController {
 		}
 		
 		
-		return ResponseEntity.ok(eventService.createOrUpdateEvent(event, path));
+		return ResponseEntity.ok(eventService.createOrUpdateEvent(event, path, authorization));
 	}
 	
 	@GetMapping("/{id}/image")
