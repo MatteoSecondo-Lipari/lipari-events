@@ -15,3 +15,11 @@ insert into locations (citta) values  ("Ancona"), ("Bari"), ("Bergamo"), ("Bolog
 ("Napoli"), ("Padova"), ("Palermo"), ("Parma"), ("Pescara"), ("Piacenza"), ("Reggio Calabria"),
 ("Reggio Emilia"), ("Roma"), ("Siena"), ("Torino"), ("Trento"), ("Trieste"), ("Udine"),
 ("Varese"), ("Venezia"), ("Verona");
+
+INSERT INTO event (name, date, imagePath, subcategory_id, location_id) VALUES
+("Rock Concert", '2024-08-15', 'path/to/rock_concert.jpg', 1, 12),
+("Jazz Night", '2024-07-20', 'path/to/jazz_night.jpg', 3, 22),
+("Soccer Match", '2024-09-10', 'path/to/soccer_match.jpg', 13, 25),
+("Art Exhibition", '2024-10-05', 'path/to/art_exhibition.jpg', 18, 8),
+("Film Premiere", '2024-11-01', 'path/to/film_premiere.jpg', 21, 18);
+
