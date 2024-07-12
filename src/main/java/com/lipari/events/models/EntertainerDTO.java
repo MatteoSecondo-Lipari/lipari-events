@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,4 +17,10 @@ public class EntertainerDTO {
 	private String type;
 	
 	private UserDTO user;
+
+	public EntertainerDTO(long id) {
+		super();
+		this.id = id;
+	}
+	
 }
