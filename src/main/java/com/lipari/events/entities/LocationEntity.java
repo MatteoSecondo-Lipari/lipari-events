@@ -26,7 +26,7 @@ public class LocationEntity {
 	private int id;
 	
 	@NotBlank(message = "Must be not null must and contain at least one non-whitespace character")
-	private String citta;
+	private String city;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "location")
 	private List<EventEntity> events;
