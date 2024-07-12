@@ -8,7 +8,6 @@ import com.lipari.events.models.UserDTO;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,6 +41,5 @@ public class CustomerConstraintsDTO {
 	@Past(message = "Must be a past date")
 	private LocalDate birthDate;
 	
-	@NotNull(message = "Must be not null")
 	private UserDTO user;
 }

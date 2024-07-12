@@ -11,4 +11,5 @@ public interface EntertainerService {
 	
 	public List<EntertainerDTO> getAllEntertainers();
 	public EntertainerDTO getEntertainerById();
+	public List<EntertainerDTO> getEntertainerByStageName(String stageName);
 }

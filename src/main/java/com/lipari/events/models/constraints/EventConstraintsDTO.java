@@ -1,7 +1,9 @@
 package com.lipari.events.models.constraints;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import com.lipari.events.models.EntertainerDTO;
 import com.lipari.events.models.EventSubcategoryDTO;
 import com.lipari.events.models.LocationDTO;
 
@@ -30,4 +32,6 @@ public class EventConstraintsDTO {
 	
 	@NotNull(message = "Must be not null")
 	private EventSubcategoryDTO subcategory;
+	
+	private List<EntertainerDTO> entertainers;
 }
