@@ -22,6 +22,6 @@ public class LocationController{
 	public List<LocationDTO> getAllLocation(LocationDTO l){
 		return locationService.getAllLocation();
 	}
-	
+	// Prova
 }
 
