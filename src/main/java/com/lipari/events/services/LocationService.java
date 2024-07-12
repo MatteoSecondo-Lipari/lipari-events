@@ -3,10 +3,11 @@ package com.lipari.events.services;
 import java.util.List;
 
 
-import com.lipari.events.models.LocationDTO;
+
+import com.lipari.events.models.LocationWithEventsDTO;
 
 public interface LocationService {
 	
-	public List<LocationDTO> getAllLocation();
+	public List<LocationWithEventsDTO> getAllLocation();
 	
 }
