@@ -14,6 +14,4 @@ public class LocationDTO {
 	private int id;
 	
 	private String citta;
-	
-	private List<EventWithoutSubcategoryDTO> events;
 }
