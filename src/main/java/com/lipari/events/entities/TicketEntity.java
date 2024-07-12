@@ -11,8 +11,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,20 +26,18 @@ public class TicketEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@NotBlank(message = "Must be not null and must contain at least one non-whitespace character")
-	private String seat;
-	
-	@NotNull(message = "Must be not null and must contain at least one non-whitespace character")
-	private float price;
-	
 	@FutureOrPresent(message = "Must be a future or current date")
 	private LocalDate purchaseDate;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "event_id")
+	@JoinColumn(name = "seat_id", nullable = false)
+	private SeatEntity seat;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "event_id", nullable = false)
 	private EventEntity event;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "customer_id")
+	@JoinColumn(name = "customer_id", nullable = false)
 	private CustomerEntity customer;
 }
