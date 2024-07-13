@@ -1,5 +1,6 @@
 package com.lipari.events.services.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,11 @@ public class TicketServiceImpl implements TicketService{
 		dashBoardDTO.setTicketSold(ticketsSold);
 		
 		return dashBoardDTO;
+	}
+	
+	@Override
+	public List<LocalDate> getPurchaseDate(long eventId){
+		return ticketRepository.findPurchaseDatesByEventId(eventId);
 	}
 	
 	

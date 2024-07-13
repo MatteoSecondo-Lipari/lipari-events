@@ -1,5 +1,6 @@
 package com.lipari.events.repositories;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,9 +16,11 @@ public interface TicketRepository extends JpaRepository<TicketEntity, Long> {
 	
 	long countByEventId(long eventId);
 	
-	 @Query("select purchase_date FROM tickets WHERE event_id = :eventId")
-	 long countTicketsByEventId(long eventId);
+	@Query(value = "select purchase_date FROM tickets t WHERE t.event.id = 1", nativeQuery = true)
+	List<LocalDate> findPurchaseDatesByEventId(long eventId);
 	
+	
+	 
 	//@Query("Select t.id from TicketEntity t where event_id = ?1")
 	//float getTotalRevenueByEventId(long eventId);
 	

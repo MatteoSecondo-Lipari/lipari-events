@@ -1,5 +1,6 @@
 package com.lipari.events.controllers;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,11 @@ public class TicketController {
 	@GetMapping("/find/{eventid}")
 	public DashBoardDTO getByEventid(@PathVariable long eventid) {
 		return ticketService.getDashboard(eventid);
+	}
+	
+	@GetMapping("/purchase/{eventid}")
+	public List<LocalDate> getPurchaseDate(@PathVariable long eventid) {
+		return ticketService.getPurchaseDate(eventid);
 	
 	}
 }

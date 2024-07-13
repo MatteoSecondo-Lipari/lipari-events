@@ -73,6 +73,7 @@ public class WebSecurityConfig {
 					.requestMatchers("/event/dashboard").permitAll()
 					.requestMatchers("/ticket/getall").permitAll()
 					.requestMatchers("/ticket/find/{eventid}").permitAll()
+					.requestMatchers("/ticket/purchase/{eventid}").permitAll()
 					.anyRequest().authenticated()
 			);
 		

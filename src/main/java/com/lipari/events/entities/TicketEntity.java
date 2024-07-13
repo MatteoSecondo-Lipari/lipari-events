@@ -18,8 +18,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Table(name = "tickets")
+@Entity(name = "tickets")
 public class TicketEntity {
 
 	@Id
