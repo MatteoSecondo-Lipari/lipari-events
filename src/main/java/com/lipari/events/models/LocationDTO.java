@@ -1,7 +1,5 @@
 package com.lipari.events.models;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,5 +13,5 @@ public class LocationDTO {
 	
 	private String city;
 	
-	
+	private String address;
 }

@@ -24,7 +24,7 @@ public class TicketEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private long id;
 	
 	@FutureOrPresent(message = "Must be a future or current date")
 	private LocalDate purchaseDate;
