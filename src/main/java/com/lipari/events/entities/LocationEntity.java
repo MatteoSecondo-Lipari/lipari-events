@@ -35,10 +35,10 @@ public class LocationEntity {
 	private String address;
 	
 	@NotNull(message = "Must be not null")
-	private int ticketsNumber;
+	private int maxSeats;
 	
 	@NotNull(message = "Must be not null")
-	private int numberedTicketsNumber;
+	private int maxNumberedSeats;
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "locations")
 	private List<SeatEntity> seats;
