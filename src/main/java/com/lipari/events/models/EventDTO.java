@@ -22,4 +22,8 @@ public class EventDTO {
 	private LocationDTO location;
 	
 	private EventSubcategoryDTO subcategory;
+	
+	private float ticketPrice;
+	
+	private float numberedTicketPrice;
 }

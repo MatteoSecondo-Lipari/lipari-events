@@ -30,7 +30,7 @@ public class TicketEntity {
 	private LocalDate purchaseDate;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "seat_id", nullable = false)
+	@JoinColumn(name = "seat_id")
 	private SeatEntity seat;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
