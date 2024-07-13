@@ -2,6 +2,7 @@ package com.lipari.events.controllers;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lipari.events.models.EventTicketDTO;
 import com.lipari.events.models.constraints.EventConstraintsDTO;
 import com.lipari.events.payload.MessageResponse;
 import com.lipari.events.services.EventService;
@@ -37,6 +39,8 @@ public class EventController {
 	
 	@Autowired
 	ImageService imageService;
+	
+	
 
 	@PreAuthorize("hasAnyRole('ROLE_ENTERTAINER','ROLE_ADMIN')")
 	@PostMapping(path = "/save", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
@@ -89,5 +93,11 @@ public class EventController {
             		new MessageResponse("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR.value()));
         }
     }
+	
+	@GetMapping("/dashboard")
+	public List<EventTicketDTO> getAllEventTicket(){
+		return eventService.getAllEventTicket();
+		
+	}
 	
 }

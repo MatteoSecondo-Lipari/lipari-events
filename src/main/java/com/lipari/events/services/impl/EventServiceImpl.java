@@ -12,6 +12,7 @@ import com.lipari.events.mappers.EntertainerMapper;
 import com.lipari.events.mappers.EventMapper;
 import com.lipari.events.models.EntertainerDTO;
 import com.lipari.events.models.EventDTO;
+import com.lipari.events.models.EventTicketDTO;
 import com.lipari.events.models.constraints.EventConstraintsDTO;
 import com.lipari.events.repositories.EventRepository;
 import com.lipari.events.repositories.UserRepository;
@@ -65,6 +66,12 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public EventDTO getEventById(long id) {
 		return eventMapper.entityToDto(eventRepository.findById(id).orElseThrow());
+	}
+
+	@Override
+	public List<EventTicketDTO> getAllEventTicket() {
+		return eventRepository.findAll().stream()
+				.map(eventMapper::entityWithTicketToDto).toList();
 	}
 
 }

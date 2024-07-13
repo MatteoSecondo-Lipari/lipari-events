@@ -2,6 +2,8 @@ package com.lipari.events.models;
 
 import java.time.LocalDate;
 
+import com.lipari.events.entities.EventEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TicketDTO {
+public class TicketWithoutEventDTO {
 
 	private int id;
 	
@@ -17,7 +19,7 @@ public class TicketDTO {
 	
 	private SeatDTO seat;
 	
-	private EventTicketDTO event;
+	private EventEntity event;
 	
 	private CustomerDTO customer;
 }
