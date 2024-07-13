@@ -66,5 +66,15 @@ public class EventServiceImpl implements EventService {
 	public EventDTO getEventById(long id) {
 		return eventMapper.entityToDto(eventRepository.findById(id).orElseThrow());
 	}
+	
+	public List<EventDTO> getEventWithName(String name) {
+		return eventRepository.findEventByNameStartingWith(name).stream()
+				.map(eventMapper::entityToDto).toList();
+	}
+	
+//	public List<EventDTO> getEventWithEntertainers(String entertainers) {
+//		return eventRepository.findEventByentertainers(entertainers).stream()
+//				.map(eventMapper::entityToDto).toList();
+//	}
 
 }

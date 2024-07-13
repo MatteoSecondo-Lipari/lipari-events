@@ -2,6 +2,7 @@ package com.lipari.events.controllers;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lipari.events.models.EventDTO;
 import com.lipari.events.models.constraints.EventConstraintsDTO;
 import com.lipari.events.payload.MessageResponse;
 import com.lipari.events.services.EventService;
@@ -89,5 +91,15 @@ public class EventController {
             		new MessageResponse("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR.value()));
         }
     }
+	
+//	@GetMapping("/search/entertainer/{entertainers}")
+//	public List<EventDTO> getEventWithE(@PathVariable String entertainers) {
+//		return eventService.getEventWithEntertainers(entertainers);
+//	}
+	
+	@GetMapping("/search/name/{name}")
+	public List<EventDTO> getEventWithN(@PathVariable String name) {
+		return eventService.getEventWithName(name);
+	}
 	
 }
