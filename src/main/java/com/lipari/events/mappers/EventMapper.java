@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 
 import com.lipari.events.entities.EventEntity;
 import com.lipari.events.models.EventDTO;
+import com.lipari.events.models.EventWithSubcategoryWithoutloopDTO;
 import com.lipari.events.models.EventWithoutSubcategoryDTO;
 import com.lipari.events.models.constraints.EventConstraintsDTO;
 
@@ -21,4 +22,8 @@ public interface EventMapper {
 	public EventWithoutSubcategoryDTO entityToDtoWithoutSubcategory(EventEntity entity);
 	
 	public EventEntity dtoWithoutSubcategoryToEntity(EventWithoutSubcategoryDTO dto);
+	
+	public EventWithSubcategoryWithoutloopDTO EntitySearchWithoutLooptoDto(EventEntity entity);
+	
+	public EventEntity DtoSearchWithoutLooptoEntity (EventWithSubcategoryWithoutloopDTO dto);
 }

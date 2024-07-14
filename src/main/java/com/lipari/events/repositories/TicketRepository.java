@@ -6,4 +6,6 @@ import com.lipari.events.entities.TicketEntity;
 
 public interface TicketRepository extends JpaRepository<TicketEntity, Long> {
 
+	
+	
 }

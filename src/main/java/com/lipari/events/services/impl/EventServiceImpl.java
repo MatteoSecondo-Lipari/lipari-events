@@ -11,8 +11,11 @@ import com.lipari.events.entities.EventEntity;
 import com.lipari.events.mappers.EntertainerMapper;
 import com.lipari.events.mappers.EventMapper;
 import com.lipari.events.models.EntertainerDTO;
+
 import com.lipari.events.models.EventDTO;
+import com.lipari.events.models.EventWithSubcategoryWithoutloopDTO;
 import com.lipari.events.models.constraints.EventConstraintsDTO;
+import com.lipari.events.repositories.EntertainerRepository;
 import com.lipari.events.repositories.EventRepository;
 import com.lipari.events.repositories.UserRepository;
 import com.lipari.events.security.jwt.JwtUtils;
@@ -35,6 +38,7 @@ public class EventServiceImpl implements EventService {
 	
 	@Autowired
 	EntertainerMapper entertainerMapper;
+
 
 	@Override
 	public EventDTO createOrUpdateEvent(EventConstraintsDTO event, String imagePath, String authorization) {
@@ -66,5 +70,11 @@ public class EventServiceImpl implements EventService {
 	public EventDTO getEventById(long id) {
 		return eventMapper.entityToDto(eventRepository.findById(id).orElseThrow());
 	}
+	
+	public List<EventWithSubcategoryWithoutloopDTO> getEventWithName(String name) {
+		return eventRepository.findEventByNameStartingWith(name).stream()
+				.map(eventMapper::EntitySearchWithoutLooptoDto).toList();
+	}
+	
 
 }
