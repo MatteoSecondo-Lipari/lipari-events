@@ -22,9 +22,12 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lipari.events.models.EventDTO;
+import com.lipari.events.models.EntertainerNNEventsDTO;
+import com.lipari.events.models.EventWithSubcategoryWithoutloopDTO;
+import com.lipari.events.models.SearchResultsDTO;
 import com.lipari.events.models.constraints.EventConstraintsDTO;
 import com.lipari.events.payload.MessageResponse;
+import com.lipari.events.services.EntertainerService;
 import com.lipari.events.services.EventService;
 import com.lipari.events.services.ImageService;
 
@@ -39,6 +42,9 @@ public class EventController {
 	
 	@Autowired
 	ImageService imageService;
+	
+	@Autowired
+	EntertainerService entertainerService;
 
 	@PreAuthorize("hasAnyRole('ROLE_ENTERTAINER','ROLE_ADMIN')")
 	@PostMapping(path = "/save", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
@@ -92,14 +98,27 @@ public class EventController {
         }
     }
 	
-//	@GetMapping("/search/entertainer/{entertainers}")
-//	public List<EventDTO> getEventWithE(@PathVariable String entertainers) {
-//		return eventService.getEventWithEntertainers(entertainers);
-//	}
+	@GetMapping("/search/entertainer/{entertainers}")
+	public List<EntertainerNNEventsDTO> getEventWithE(@PathVariable String entertainers) {
+		return entertainerService.getEventWithEntertainers(entertainers);
+	}
 	
 	@GetMapping("/search/name/{name}")
-	public List<EventDTO> getEventWithN(@PathVariable String name) {
+	public List<EventWithSubcategoryWithoutloopDTO> getEventWithN(@PathVariable String name) {
 		return eventService.getEventWithName(name);
 	}
+	
+	@GetMapping("/searchbar/{search}")
+	public ResponseEntity<SearchResultsDTO> search(@PathVariable String search) {
+        List<EventWithSubcategoryWithoutloopDTO> events = eventService.getEventWithName(search);
+        List<EntertainerNNEventsDTO> entertainers = entertainerService.getEventWithEntertainers(search);
+
+        if (events.isEmpty() && entertainers.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        SearchResultsDTO results = new SearchResultsDTO(events, entertainers);
+        return ResponseEntity.ok(results);
+    }
 	
 }
