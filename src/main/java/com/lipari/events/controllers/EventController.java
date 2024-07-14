@@ -114,7 +114,8 @@ public class EventController {
         List<EntertainerNNEventsDTO> entertainers = entertainerService.getEventWithEntertainers(search);
 
         if (events.isEmpty() && entertainers.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        	SearchResultsDTO nothing = new SearchResultsDTO(events, entertainers);
+        	return ResponseEntity.ok(nothing);
         }
 
         SearchResultsDTO results = new SearchResultsDTO(events, entertainers);
