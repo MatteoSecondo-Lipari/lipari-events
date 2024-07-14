@@ -70,6 +70,7 @@ public class WebSecurityConfig {
 					.requestMatchers("/entertainer/stage-name/**").permitAll()
 					.requestMatchers("/event/category/all-events").permitAll()
 					.requestMatchers("/location/all").permitAll()
+					.requestMatchers("/ticket/checkout-webhook").permitAll()
 					.anyRequest().authenticated()
 			);
 		

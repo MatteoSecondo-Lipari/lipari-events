@@ -36,7 +36,7 @@ public class EntertainerController {
 	public ResponseEntity<?> onboarding() {
 		try {
 			Account account = entertainerService.createStripeAccount();
-			AccountLink accountLink = entertainerService.linkToStripeAccount(account.getId());
+			AccountLink accountLink = entertainerService.linkToOnboarding(account.getId());
 			
 			return ResponseEntity.ok(accountLink.toJson());
 		} catch (StripeException e) {

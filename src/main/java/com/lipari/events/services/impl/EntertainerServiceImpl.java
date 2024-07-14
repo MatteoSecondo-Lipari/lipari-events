@@ -62,14 +62,14 @@ public class EntertainerServiceImpl implements EntertainerService {
 	}
 
 	@Override
-	public AccountLink linkToStripeAccount(String accountId) throws StripeException {
+	public AccountLink linkToOnboarding(String accountId) throws StripeException {
 		StripeClient client = new StripeClient("sk_test_51OrGCUGjZ7RLeJMqT3ykVjC3DJmA0w3YxBCsBRJEmqpo6U493CM8368ug0bWxxjQqimkU30mi0ZSq9Y89PFWedqS00PRErjXsK");
 
 		AccountLinkCreateParams params =
 		  AccountLinkCreateParams.builder()
 		    .setAccount(accountId)
-		    .setRefreshUrl("https://google.com")
-		    .setReturnUrl("https://facebook.com")
+		    .setRefreshUrl("http://localhost:4200")
+		    .setReturnUrl("http://localhost:4200")
 		    .setType(AccountLinkCreateParams.Type.ACCOUNT_ONBOARDING)
 		    .build();
 

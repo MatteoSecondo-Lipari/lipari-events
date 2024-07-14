@@ -17,5 +17,5 @@ public interface EntertainerService {
 	public List<EntertainerDTO> getEntertainerByStageName(String stageName);
 	
 	public Account createStripeAccount() throws StripeException;
-	public AccountLink linkToStripeAccount(String accountId) throws StripeException;
+	public AccountLink linkToOnboarding(String accountId) throws StripeException;
 }

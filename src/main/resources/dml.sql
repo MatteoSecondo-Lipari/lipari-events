@@ -10,16 +10,23 @@ insert into event_subcategories (name, category_id) values
 ("Summary", 6),
 ("Circus", 7), ("Exhibitions", 7), ("Theme parks", 7), ("Other", 7);
 
-insert into locations (city) values  ("Ancona"), ("Bari"), ("Bergamo"), ("Bologna"), ("Caserta"),
-("Catania"), ("Ferrara"), ("Firenze"), ("Forlì"), ("Genova"), ("Lucca"), ("Milano"), ("Misano"), ("Monza"),
-("Napoli"), ("Padova"), ("Palermo"), ("Parma"), ("Pescara"), ("Piacenza"), ("Reggio Calabria"),
-("Reggio Emilia"), ("Roma"), ("Siena"), ("Torino"), ("Trento"), ("Trieste"), ("Udine"),
-("Varese"), ("Venezia"), ("Verona");
+insert into locations (city, address, max_numbered_seats, max_seats) values 
+("Ancona", "Via prova", 500, 3000), ("Bari", "Via prova", 500, 3000), ("Bergamo", "Via prova", 500, 3000),
+("Bologna", "Via prova", 500, 3000), ("Caserta", "Via prova", 500, 3000), ("Catania", "Via prova", 500, 3000),
+("Ferrara", "Via prova", 500, 3000), ("Firenze", "Via prova", 500, 3000), ("Forlì", "Via prova", 500, 3000),
+("Genova", "Via prova", 500, 3000), ("Lucca", "Via prova", 500, 3000), ("Milano", "Via prova", 500, 3000),
+("Misano", "Via prova", 500, 3000), ("Monza", "Via prova", 500, 3000), ("Napoli", "Via prova", 500, 3000),
+("Padova", "Via prova", 500, 3000), ("Palermo", "Via prova", 500, 3000), ("Parma", "Via prova", 500, 3000),
+("Pescara", "Via prova", 500, 3000), ("Piacenza", "Via prova", 500, 3000), ("Reggio Calabria", "Via prova", 500, 3000),
+("Reggio Emilia", "Via prova", 500, 3000), ("Roma", "Via prova", 500, 3000), ("Siena", "Via prova", 500, 3000),
+("Torino", "Via prova", 500, 3000), ("Trento", "Via prova", 500, 3000), ("Trieste", "Via prova", 500, 3000),
+("Udine", "Via prova", 500, 3000),
+("Varese", "Via prova", 500, 3000), ("Venezia", "Via prova", 500, 3000), ("Verona", "Via prova", 500, 3000);
 
-INSERT INTO events (name, date, image_Path, subcategory_id, location_id) VALUES
-("Rock Concert", '2024-08-15', 'path/to/rock_concert.jpg', 1, 12),
-("Jazz Night", '2024-07-20', 'path/to/jazz_night.jpg', 3, 22),
-("Soccer Match", '2024-09-10', 'path/to/soccer_match.jpg', 13, 25),
-("Art Exhibition", '2024-10-05', 'path/to/art_exhibition.jpg', 18, 8),
-("Film Premiere", '2024-11-01', 'path/to/film_premiere.jpg', 21, 18);
+INSERT INTO events (name, date, image_Path, subcategory_id, location_id, numbered_ticket_price, ticket_price) VALUES
+("Rock Concert", '2024-08-15', 'path/to/rock_concert.jpg', 1, 12, 35, 30),
+("Jazz Night", '2024-07-20', 'path/to/jazz_night.jpg', 3, 22, 35, 30),
+("Soccer Match", '2024-09-10', 'path/to/soccer_match.jpg', 13, 25, 35, 30),
+("Art Exhibition", '2024-10-05', 'path/to/art_exhibition.jpg', 18, 8, 35, 30),
+("Film Premiere", '2024-11-01', 'path/to/film_premiere.jpg', 21, 18, 35, 30);
 

@@ -1,7 +1,6 @@
 package com.lipari.events.services.impl;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +12,7 @@ import com.lipari.events.repositories.TicketRepository;
 import com.lipari.events.services.TicketService;
 import com.stripe.StripeClient;
 import com.stripe.exception.StripeException;
-import com.stripe.model.checkout.Session;
+import com.stripe.param.TransferCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
 
 @Service
@@ -26,7 +25,7 @@ public class TicketServiceImpl implements TicketService {
 	TicketMapper ticketMapper;
 
 	@Override
-	public Session purchase(List<TicketDTO> tickets, long price) throws StripeException {
+	public String checkout(List<TicketDTO> tickets, long price, String transferGroup) throws StripeException {
 		StripeClient client = new StripeClient("sk_test_51OrGCUGjZ7RLeJMqT3ykVjC3DJmA0w3YxBCsBRJEmqpo6U493CM8368ug0bWxxjQqimkU30mi0ZSq9Y89PFWedqS00PRErjXsK");
 
 		SessionCreateParams params =
@@ -48,24 +47,41 @@ public class TicketServiceImpl implements TicketService {
 		        .build()
 		    )
 		    .setPaymentIntentData(
-		      SessionCreateParams.PaymentIntentData.builder().setTransferGroup(UUID.randomUUID().toString()).build()
+		      SessionCreateParams.PaymentIntentData.builder().setTransferGroup(transferGroup).build()
 		    )
 		    .setMode(SessionCreateParams.Mode.PAYMENT)
-		    .setSuccessUrl("https://google.com")
+		    .setSuccessUrl("http://localhost:4200")
+		    .setCancelUrl("http://localhost:4200")
 		    .build();
 
-		return client.checkout().sessions().create(params);
+		return client.checkout().sessions().create(params).getLastResponse().body();
 	}
 
 	@Override
-	public long getTicketPrice(long id) {
-		TicketEntity ticketE = ticketRepository.findById(id).orElseThrow();
+	public boolean saveAll(List<TicketDTO> tickets) {
+		List<TicketEntity> ticketsE =  ticketMapper.dtosToEntities(tickets);
 		
-		if(ticketE.getSeat() == null) {
-			return (long)ticketE.getEvent().getTicketPrice();
+		if(ticketRepository.saveAll(ticketsE) == null) {
+			return false;
 		}
 		
-		return (long)ticketE.getEvent().getNumberedTicketPrice() * 100;
+		return true;
+	}
+
+	@Override
+	public boolean transfers(String transferGroup, long amount) throws StripeException {
+		StripeClient client = new StripeClient("sk_test_51OrGCUGjZ7RLeJMqT3ykVjC3DJmA0w3YxBCsBRJEmqpo6U493CM8368ug0bWxxjQqimkU30mi0ZSq9Y89PFWedqS00PRErjXsK");
+
+		TransferCreateParams params =
+				TransferCreateParams.builder()
+				.setAmount(amount)
+				.setCurrency("eur")
+				.setDestination("{{CONNECTED_ACCOUNT_ID}}")
+				.setTransferGroup(transferGroup)
+				.build();
+
+		client.transfers().create(params);
+		return true;
 	}
 
 }
