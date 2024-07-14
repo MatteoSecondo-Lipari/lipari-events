@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lipari.events.models.EntertainerNNEventsDTO;
+import com.lipari.events.models.EventStatsDashboardDTO;
 import com.lipari.events.models.EventWithSubcategoryWithoutloopDTO;
 import com.lipari.events.models.SearchResultsDTO;
 import com.lipari.events.models.constraints.EventConstraintsDTO;
@@ -32,6 +33,8 @@ import com.lipari.events.services.EventService;
 import com.lipari.events.services.ImageService;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/event")
@@ -121,5 +124,11 @@ public class EventController {
         SearchResultsDTO results = new SearchResultsDTO(events, entertainers);
         return ResponseEntity.ok(results);
     }
+	@GetMapping("/dashboard/all")
+	
+	 public ResponseEntity<List<EventStatsDashboardDTO>> getAllEventStatistics() {
+	        List<EventStatsDashboardDTO> statistics = eventService.getEventStatistics();
+	        return ResponseEntity.ok(statistics);
+	    }
 	
 }
