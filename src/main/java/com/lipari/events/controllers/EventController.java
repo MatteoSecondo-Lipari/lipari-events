@@ -124,6 +124,6 @@ public class EventController {
 	
 	@GetMapping("/newest")
 	public List<EventWithSubcategoryWithoutloopDTO> newest(){
-		return null;
+		return eventService.getTop20newestEvents();
 	}
 }
