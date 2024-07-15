@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lipari.events.entities.EventsEntertainersEntity;
 import com.lipari.events.entities.TicketEntity;
 import com.lipari.events.mappers.TicketMapper;
 import com.lipari.events.models.TicketDTO;
@@ -12,6 +13,7 @@ import com.lipari.events.repositories.TicketRepository;
 import com.lipari.events.services.TicketService;
 import com.stripe.StripeClient;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Transfer;
 import com.stripe.param.TransferCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
 
@@ -69,19 +71,24 @@ public class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public boolean transfers(String transferGroup, long amount) throws StripeException {
+	public void transfers(List<EventsEntertainersEntity> eventsEntertainers, String transferGroup, long totalAmount) throws StripeException {
 		StripeClient client = new StripeClient("sk_test_51OrGCUGjZ7RLeJMqT3ykVjC3DJmA0w3YxBCsBRJEmqpo6U493CM8368ug0bWxxjQqimkU30mi0ZSq9Y89PFWedqS00PRErjXsK");
 
-		TransferCreateParams params =
-				TransferCreateParams.builder()
-				.setAmount(amount)
-				.setCurrency("eur")
-				.setDestination("{{CONNECTED_ACCOUNT_ID}}")
-				.setTransferGroup(transferGroup)
-				.build();
+		for (EventsEntertainersEntity eventEntertainer : eventsEntertainers) {
+			String destination = eventEntertainer.getEntertainer().getStripeConnectedAccount();
+			long amount = (long)(totalAmount / 100 * eventEntertainer.getPercentage() - 100);
+			
+			TransferCreateParams params =
+					TransferCreateParams.builder()
+					.setAmount(amount)
+					.setCurrency("eur")
+					.setDestination(destination)
+					.setTransferGroup(transferGroup)
+					.build();
 
-		client.transfers().create(params);
-		return true;
+			Transfer transfer = client.transfers().create(params);
+			System.out.println(transfer.getAmount());
+		}
 	}
 
 }

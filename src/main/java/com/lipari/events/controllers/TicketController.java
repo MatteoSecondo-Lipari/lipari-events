@@ -15,11 +15,12 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lipari.events.entities.EventEntity;
 import com.lipari.events.models.EventDTO;
 import com.lipari.events.models.TicketDTO;
 import com.lipari.events.payload.MessageResponse;
 import com.lipari.events.services.EventService;
-import com.lipari.events.services.StripeOrderInfoService;
+import com.lipari.events.services.StripeRequestsStorageService;
 import com.lipari.events.services.TicketService;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
@@ -38,19 +39,20 @@ public class TicketController {
 	TicketService ticketService;
 
 	@Autowired
-	StripeOrderInfoService stripeOrderInfoService;
+	StripeRequestsStorageService stripeRequestsStorageService;
 
 	@Autowired
 	EventService eventService;
 
+	//TODO: check if tickets that have to be purchased can be purchased -> maxTickets or maxNumberedTickets
 	@PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
-	@PostMapping("/purchase")
+	@PostMapping("/checkout")
 	public ResponseEntity<?> purchaseAndCreate(@RequestBody List<TicketDTO> tickets) {
 		long ticketPrice;
 		EventDTO event;
 
 		try {
-			event = eventService.getEventById(tickets.getFirst().getEvent().getId());
+			event = eventService.getEventDTOById(tickets.getFirst().getEvent().getId());
 		} catch (NoSuchElementException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
 					new MessageResponse("Event not found", HttpStatus.NOT_FOUND.value()));
@@ -66,8 +68,8 @@ public class TicketController {
 
 		try {
 			String key = UUID.randomUUID().toString();
-
-			stripeOrderInfoService.addTicketsToQueue(key, tickets);
+			stripeRequestsStorageService.addTicketsToQueue(key, tickets);
+			
 			return ResponseEntity.ok(ticketService.checkout(tickets, ticketPrice, key));
 		} catch (StripeException e) {
 			return ResponseEntity.internalServerError().body(
@@ -76,7 +78,7 @@ public class TicketController {
 	}
 
 	@PostMapping("/checkout-webhook")
-	public ResponseEntity<?> postMethodName(
+	public ResponseEntity<?> saveTicketsAndDoTrasfers(
 			@RequestHeader("Stripe-Signature") String stripeSignature,
 			@RequestBody String body) {
 		String webhookSecret = "whsec_e994884d0dceb279ea9e3d2c91e88ee64af2924837e68d6c242e1243390ed5fc";
@@ -103,12 +105,22 @@ public class TicketController {
 			PaymentIntent paymentIntent = (PaymentIntent) stripeObject;
 
 			String key = paymentIntent.getTransferGroup();
-
-			ticketService.saveAll(stripeOrderInfoService.getTicketsFromQueue(key));
-			stripeOrderInfoService.clearQueue(key);
+			List<TicketDTO> tickets = stripeRequestsStorageService.getTicketsFromQueue(key);
 			
-			//TODO: trasfer amount to entertainers
+			ticketService.saveAll(tickets);
 			
+			long eventId = tickets.getFirst().getEvent().getId();
+			EventEntity e =  eventService.getEventEntityById(eventId);
+			
+			try {
+				ticketService.transfers(e.getEventsEntertainers(), key, paymentIntent.getAmount());
+			} catch (StripeException e1) {
+				System.out.println(e1.getMessage());
+				return ResponseEntity.internalServerError().body(
+						new MessageResponse(e1.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
+			}
+			
+			stripeRequestsStorageService.clearQueue(key);
 			break;
 		default:
 			break;

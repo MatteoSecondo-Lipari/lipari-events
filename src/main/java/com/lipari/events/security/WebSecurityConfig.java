@@ -71,6 +71,7 @@ public class WebSecurityConfig {
 					.requestMatchers("/event/category/all-events").permitAll()
 					.requestMatchers("/location/all").permitAll()
 					.requestMatchers("/ticket/checkout-webhook").permitAll()
+					.requestMatchers("/entertainer/onboarding-webhook").permitAll()
 					.anyRequest().authenticated()
 			);
 		

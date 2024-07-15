@@ -2,6 +2,7 @@ package com.lipari.events.services;
 
 import java.util.List;
 
+import com.lipari.events.entities.EntertainerEntity;
 import com.lipari.events.models.EntertainerDTO;
 import com.lipari.events.models.constraints.EntertainerConstraintsDTO;
 import com.stripe.exception.StripeException;
@@ -10,7 +11,8 @@ import com.stripe.model.AccountLink;
 
 public interface EntertainerService {
 
-	public EntertainerDTO createOrUpdateEntertainer(EntertainerConstraintsDTO customer);
+	public EntertainerDTO createEntertainer(EntertainerConstraintsDTO entertainer);
+	public EntertainerDTO updateEntertainer(EntertainerEntity entertainer);
 	
 	public List<EntertainerDTO> getAllEntertainers();
 	public EntertainerDTO getEntertainerById();

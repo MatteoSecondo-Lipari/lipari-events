@@ -28,7 +28,7 @@ public class EntertainerServiceImpl implements EntertainerService {
 	EntertainerMapper entertainerMapper;
 
 	@Override
-	public EntertainerDTO createOrUpdateEntertainer(EntertainerConstraintsDTO entertainer) {
+	public EntertainerDTO createEntertainer(EntertainerConstraintsDTO entertainer) {
 		EntertainerEntity ee = entertainerMapper.costraintsDtoToEntity(entertainer);
 		return entertainerMapper.entityToDto(entertainerRepository.save(ee));
 	}
@@ -74,6 +74,11 @@ public class EntertainerServiceImpl implements EntertainerService {
 		    .build();
 
 		return client.accountLinks().create(params);
+	}
+
+	@Override
+	public EntertainerDTO updateEntertainer(EntertainerEntity entertainer) {
+		return entertainerMapper.entityToDto(entertainerRepository.save(entertainer));
 	}
 
 }
