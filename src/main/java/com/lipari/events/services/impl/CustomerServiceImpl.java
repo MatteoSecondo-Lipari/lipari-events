@@ -12,6 +12,8 @@ import com.lipari.events.models.constraints.CustomerConstraintsDTO;
 import com.lipari.events.repositories.CustomerRepository;
 import com.lipari.events.services.CustomerService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class CustomerServiceImpl implements CustomerService {
 	
@@ -39,4 +41,10 @@ public class CustomerServiceImpl implements CustomerService {
 		return null;
 	}
 
+	
+	@Override
+	public CustomerDTO getCustomerByEmail(String email) {
+	    CustomerEntity customerEntity = customerRepository.findByUserEmail(email);
+	    return customerMapper.entityToDto(customerEntity);
+	}
 }
