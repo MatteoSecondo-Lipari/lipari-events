@@ -16,6 +16,7 @@ import com.lipari.events.mappers.CustomerMapper;
 import com.lipari.events.models.CustomerDTO;
 import com.lipari.events.models.TicketDTO;
 import com.lipari.events.models.TicketOrdersDTO;
+import com.lipari.events.models.TicketsEmptySeatDTO;
 import com.lipari.events.security.user_details.UserDetailsImpl;
 import com.lipari.events.services.CustomerService;
 import com.lipari.events.services.TicketService;
@@ -53,5 +54,10 @@ public class TicketController {
 		CustomerDTO customerDTO = customerService.getCustomerByEmail(userDetailsImpl.getEmail());
 		CustomerEntity customerEntity = customerMapper.dtoToEntity(customerDTO);
 		return ticketService.getAllByCustomerId(customerEntity);
+	}
+	
+	@GetMapping("/all")
+	public List<TicketsEmptySeatDTO> allseats(){
+		return ticketService.getAll();
 	}
 }

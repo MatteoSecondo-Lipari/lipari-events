@@ -9,6 +9,7 @@ import com.lipari.events.entities.CustomerEntity;
 import com.lipari.events.mappers.CustomerMapper;
 import com.lipari.events.mappers.TicketMapper;
 import com.lipari.events.models.TicketOrdersDTO;
+import com.lipari.events.models.TicketsEmptySeatDTO;
 import com.lipari.events.repositories.TicketRepository;
 import com.lipari.events.services.TicketService;
 
@@ -33,6 +34,10 @@ public class TicketServiceImpl implements TicketService{
 				.map(ticketMapper::entityToDtoTicketOrdersDTO).toList();
 	}
 
-	
+	@Override
+	public List<TicketsEmptySeatDTO> getAll(){
+		return ticketRepository.findAll().stream()
+				.map(ticketMapper::entityToDtoTicketsEmptySeatDTO).toList();
+	}
 	
 }
