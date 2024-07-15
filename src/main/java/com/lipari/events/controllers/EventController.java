@@ -122,4 +122,8 @@ public class EventController {
         return ResponseEntity.ok(results);
     }
 	
+	@GetMapping("/newest")
+	public List<EventWithSubcategoryWithoutloopDTO> newest(){
+		return null;
+	}
 }
