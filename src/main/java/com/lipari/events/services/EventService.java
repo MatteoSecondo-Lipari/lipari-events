@@ -16,4 +16,6 @@ public interface EventService {
 	
 	public List<EventWithSubcategoryWithoutloopDTO> getEventWithName(String name);
 	
+	public List<EventWithSubcategoryWithoutloopDTO> getTop20newestEvents();
+	
 }

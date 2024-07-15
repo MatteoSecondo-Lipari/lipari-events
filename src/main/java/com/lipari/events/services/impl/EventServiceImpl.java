@@ -71,10 +71,16 @@ public class EventServiceImpl implements EventService {
 		return eventMapper.entityToDto(eventRepository.findById(id).orElseThrow());
 	}
 	
+	@Override
 	public List<EventWithSubcategoryWithoutloopDTO> getEventWithName(String name) {
 		return eventRepository.findEventByNameStartingWith(name).stream()
 				.map(eventMapper::EntitySearchWithoutLooptoDto).toList();
 	}
 	
+	@Override
+	public List<EventWithSubcategoryWithoutloopDTO> getTop20newestEvents(){
+		return eventRepository.findTop20ByDateOrderDesc().stream()
+				.map(eventMapper::EntitySearchWithoutLooptoDto).toList();
+	}
 
 }
