@@ -1,14 +1,11 @@
 package com.lipari.events.services.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lipari.events.entities.EntertainerEntity;
 import com.lipari.events.entities.EventEntity;
-import com.lipari.events.mappers.EntertainerMapper;
 import com.lipari.events.mappers.EventMapper;
 import com.lipari.events.models.EntertainerDTO;
 
@@ -17,8 +14,6 @@ import com.lipari.events.models.EventWithSubcategoryWithoutloopDTO;
 import com.lipari.events.models.constraints.EventConstraintsDTO;
 import com.lipari.events.repositories.EntertainerRepository;
 import com.lipari.events.repositories.EventRepository;
-import com.lipari.events.repositories.UserRepository;
-import com.lipari.events.security.jwt.JwtUtils;
 import com.lipari.events.services.EventService;
 
 @Service
@@ -31,7 +26,7 @@ public class EventServiceImpl implements EventService {
 	EventMapper eventMapper;
 	
 	@Autowired
-	JwtUtils jwtUtils;
+	EntertainerRepository entertainerRepository;
 	
 	@Autowired
 	UserRepository userRepository;
@@ -39,18 +34,8 @@ public class EventServiceImpl implements EventService {
 	@Autowired
 	EntertainerMapper entertainerMapper;
 
-
 	@Override
-	public EventDTO createOrUpdateEvent(EventConstraintsDTO event, String imagePath, String authorization) {
-		String email = jwtUtils.getEmailFromJwtToken(authorization.substring(7));
-		EntertainerEntity entertainerE = userRepository.findByEmail(email).get().getEntertainer();
-		EntertainerDTO entertainer = entertainerMapper.entityToDto(entertainerE); 
-		
-		if(event.getEntertainers() == null) {
-			event.setEntertainers(new ArrayList<EntertainerDTO>());
-		}
-		
-		event.getEntertainers().add(entertainer);
+	public EventDTO createEvent(EventConstraintsDTO event, String imagePath) {
 		EventEntity ee = eventMapper.constraintsDtoToEntity(event);
 
 		if(imagePath != null) {
@@ -67,7 +52,7 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public EventDTO getEventById(long id) {
+	public EventDTO getEventDTOById(long id) {
 		return eventMapper.entityToDto(eventRepository.findById(id).orElseThrow());
 	}
 	
@@ -83,4 +68,20 @@ public class EventServiceImpl implements EventService {
 				.map(eventMapper::EntitySearchWithoutLooptoDto).toList();
 	}
 
+	@Override
+	public EventEntity getEventEntityById(long id) {
+		return eventRepository.findById(id).orElse(null);
+	}
+	
+	@Override
+	public boolean isPresentEntertainersStripeAccount(List<EntertainerDTO> entertainers) {
+		
+		for (EntertainerDTO e : entertainers) {
+			 if(entertainerRepository.findById(e.getId()).orElseThrow().getStripeConnectedAccount() == null) {
+				 return false;
+			 }
+		}
+		
+		return true;
+	}
 }

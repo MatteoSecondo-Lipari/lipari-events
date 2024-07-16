@@ -7,15 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LocationDTO {
+public class EventsEntertainersDTO {
 
-	private int id;
+	private long id;
 	
-	private String city;
+	private EventDTO event;
 	
-	private String address;
+	private EntertainerDTO entertainer;
 	
-	private int maxSeats;
-	
-	private int maxNumberedSeats;
+	private float percentage;
 }
