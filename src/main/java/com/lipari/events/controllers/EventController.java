@@ -98,16 +98,6 @@ public class EventController {
         }
     }
 	
-	@GetMapping("/search/entertainer/{entertainers}")
-	public List<EntertainerNNEventsDTO> getEventWithE(@PathVariable String entertainers) {
-		return entertainerService.getEventWithEntertainers(entertainers);
-	}
-	
-	@GetMapping("/search/name/{name}")
-	public List<EventWithSubcategoryWithoutloopDTO> getEventWithN(@PathVariable String name) {
-		return eventService.getEventWithName(name);
-	}
-	
 	@GetMapping("/searchbar/{search}")
 	public ResponseEntity<SearchResultsDTO> search(@PathVariable String search) {
         List<EventWithSubcategoryWithoutloopDTO> events = eventService.getEventWithName(search);
