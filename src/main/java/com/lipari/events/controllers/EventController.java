@@ -124,12 +124,7 @@ public class EventController {
         SearchResultsDTO results = new SearchResultsDTO(events, entertainers);
         return ResponseEntity.ok(results);
     }
-	@PreAuthorize("hasAnyRole('ROLE_ENTERTAINER','ROLE_ADMIN')")
-	@GetMapping("/{event}/dashboard")
-	 public ResponseEntity<List<EventStatsDashboardDTO>> getAllEventStatistics(@PathVariable long event) {
-	        List<EventStatsDashboardDTO> statistics = eventService.getEventStatistics(event);
-	        return ResponseEntity.ok(statistics);
-	    }
+	
 
 	
 }

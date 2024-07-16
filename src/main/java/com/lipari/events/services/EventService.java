@@ -4,7 +4,6 @@ import java.util.List;
 
 
 import com.lipari.events.models.EventDTO;
-import com.lipari.events.models.EventStatsDashboardDTO;
 import com.lipari.events.models.EventWithSubcategoryWithoutloopDTO;
 import com.lipari.events.models.constraints.EventConstraintsDTO;
 
@@ -16,8 +15,4 @@ public interface EventService {
 	public EventDTO getEventById(long id);
 	
 	public List<EventWithSubcategoryWithoutloopDTO> getEventWithName(String name);
-	
-	public List<EventStatsDashboardDTO> getEventStatistics(long event_id);
-	
-	public EventStatsDashboardDTO mapToEventStatsDashboardDTO(Object[] result);
 }
