@@ -13,7 +13,6 @@ import com.lipari.events.repositories.TicketRepository;
 import com.lipari.events.services.TicketService;
 import com.stripe.StripeClient;
 import com.stripe.exception.StripeException;
-import com.stripe.model.Transfer;
 import com.stripe.param.TransferCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
 
@@ -74,9 +73,12 @@ public class TicketServiceImpl implements TicketService {
 	public void transfers(List<EventsEntertainersEntity> eventsEntertainers, String transferGroup, long totalAmount) throws StripeException {
 		StripeClient client = new StripeClient("sk_test_51OrGCUGjZ7RLeJMqT3ykVjC3DJmA0w3YxBCsBRJEmqpo6U493CM8368ug0bWxxjQqimkU30mi0ZSq9Y89PFWedqS00PRErjXsK");
 
+		//removing fees to the amount to transfer (5%)
+		totalAmount -= totalAmount / 100 * 5;
+		
 		for (EventsEntertainersEntity eventEntertainer : eventsEntertainers) {
 			String destination = eventEntertainer.getEntertainer().getStripeConnectedAccount();
-			long amount = (long)(totalAmount / 100 * eventEntertainer.getPercentage() - 100);
+			long amount = (long)(totalAmount / 100 * eventEntertainer.getPercentage());
 			
 			TransferCreateParams params =
 					TransferCreateParams.builder()
@@ -86,9 +88,18 @@ public class TicketServiceImpl implements TicketService {
 					.setTransferGroup(transferGroup)
 					.build();
 
-			Transfer transfer = client.transfers().create(params);
-			System.out.println(transfer.getAmount());
+			client.transfers().create(params);
 		}
+	}
+
+	@Override
+	public int countTicketsByEventId(long id) {
+		return ticketRepository.countBySeatIsNullAndEventId(id);
+	}
+	
+	@Override
+	public int countNumberedTicketsByEventId(long id) {
+		return ticketRepository.countBySeatIsNotNullAndEventId(id);
 	}
 
 }

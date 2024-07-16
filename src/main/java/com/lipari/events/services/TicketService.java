@@ -13,4 +13,6 @@ public interface TicketService {
 	public String checkout(List<TicketDTO> tickets, long price, String transferGroup) throws StripeException;
 	public void transfers(List<EventsEntertainersEntity> entertainers, String transferGroup, long totalAmount) throws StripeException;
 	
+	public int countTicketsByEventId(long id);
+	public int countNumberedTicketsByEventId(long id);
 }

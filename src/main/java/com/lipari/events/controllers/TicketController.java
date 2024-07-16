@@ -9,16 +9,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lipari.events.entities.CustomerEntity;
 import com.lipari.events.entities.EventEntity;
+import com.lipari.events.models.CustomerDTO;
 import com.lipari.events.models.EventDTO;
 import com.lipari.events.models.TicketDTO;
 import com.lipari.events.payload.MessageResponse;
+import com.lipari.events.repositories.UserRepository;
+import com.lipari.events.security.user_details.UserDetailsImpl;
 import com.lipari.events.services.EventService;
 import com.lipari.events.services.StripeRequestsStorageService;
 import com.lipari.events.services.TicketService;
@@ -30,24 +35,26 @@ import com.stripe.model.PaymentIntent;
 import com.stripe.model.StripeObject;
 import com.stripe.net.Webhook;
 
-
 @RestController
 @RequestMapping("/ticket")
 public class TicketController {
+	
+	@Autowired
+	UserRepository userRepository;
 
 	@Autowired
 	TicketService ticketService;
+	
+	@Autowired
+	EventService eventService;
 
 	@Autowired
 	StripeRequestsStorageService stripeRequestsStorageService;
 
-	@Autowired
-	EventService eventService;
-
-	//TODO: check if tickets that have to be purchased can be purchased -> maxTickets or maxNumberedTickets
 	@PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
 	@PostMapping("/checkout")
 	public ResponseEntity<?> purchaseAndCreate(@RequestBody List<TicketDTO> tickets) {
+	
 		long ticketPrice;
 		EventDTO event;
 
@@ -57,14 +64,36 @@ public class TicketController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
 					new MessageResponse("Event not found", HttpStatus.NOT_FOUND.value()));
 		}
-
+		
+		//check if tickets that have to be purchased can be purchased (consider maxTicketsNumber and maxNumberedTicketsNumber)
 		if(tickets.getFirst().getSeat() == null) {
+			if(event.getLocation().getMaxSeats() < tickets.size() + ticketService.countTicketsByEventId(event.getId())) {
+				return ResponseEntity.internalServerError().body(
+						new MessageResponse("There aren't enough seats available", HttpStatus.INTERNAL_SERVER_ERROR.value()));
+			}
+			
 			ticketPrice = (long)event.getTicketPrice() * 100;
 		} else {
+			if(event.getLocation().getMaxNumberedSeats() < tickets.size() + ticketService.countNumberedTicketsByEventId(event.getId())) {
+				return ResponseEntity.internalServerError().body(
+						new MessageResponse("There aren't enough numbered seats available", HttpStatus.INTERNAL_SERVER_ERROR.value()));
+			}
+			
 			ticketPrice = (long)event.getNumberedTicketPrice() * 100;
 		}
-
-		tickets.forEach(t -> t.setPurchaseDate(LocalDate.now()));
+		
+		//tickets can be purchased
+		UserDetailsImpl userDetailsImpl = (UserDetailsImpl)SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		String email = userDetailsImpl.getEmail();
+		
+		CustomerEntity customerE = userRepository.findByEmail(email).get().getCustomer();
+		
+		tickets.forEach(t -> {
+			t.setPurchaseDate(LocalDate.now());
+			t.setEvent(event);
+			t.setCustomer(new CustomerDTO(customerE.getId()));
+		});
 
 		try {
 			String key = UUID.randomUUID().toString();

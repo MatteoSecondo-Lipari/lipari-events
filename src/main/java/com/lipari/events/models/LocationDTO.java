@@ -14,4 +14,8 @@ public class LocationDTO {
 	private String city;
 	
 	private String address;
+	
+	private int maxSeats;
+	
+	private int maxNumberedSeats;
 }
