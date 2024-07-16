@@ -13,6 +13,8 @@ import com.lipari.events.models.CustomerDTO;
 public interface TicketRepository extends JpaRepository<TicketEntity, Long> {
 
 	List<TicketEntity> findByCustomer(CustomerEntity customer);
+	
+	List<TicketEntity> findByEventId(long eventid);
 
 	
 }

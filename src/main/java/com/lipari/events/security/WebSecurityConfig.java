@@ -73,7 +73,7 @@ public class WebSecurityConfig {
 					.requestMatchers("/event/searchbar/{search}").permitAll()
 					.requestMatchers("/event/newest").permitAll()
 					.requestMatchers("/location/seats/{event}").permitAll()
-					.requestMatchers("/ticket/all").permitAll()
+					.requestMatchers("/ticket/all/{event}").permitAll()
 					.anyRequest().authenticated()
 			);
 		

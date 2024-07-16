@@ -6,18 +6,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lipari.events.mappers.EventMapper;
 import com.lipari.events.mappers.LocationMapper;
-import com.lipari.events.mappers.TicketMapper;
 import com.lipari.events.models.EventDTO;
 import com.lipari.events.models.LocationSeatsDTO;
 import com.lipari.events.models.LocationWithEventsDTO;
 import com.lipari.events.models.SeatDTO;
 import com.lipari.events.models.TicketsEmptySeatDTO;
-import com.lipari.events.repositories.EventRepository;
 import com.lipari.events.repositories.LocationRepository;
-import com.lipari.events.repositories.TicketRepository;
+import com.lipari.events.services.EventService;
 import com.lipari.events.services.LocationService;
+import com.lipari.events.services.TicketService;
 
 @Service
 public class LocationServiceImpl implements LocationService{
@@ -28,18 +26,12 @@ public class LocationServiceImpl implements LocationService{
 	
 	@Autowired
 	LocationMapper locationMapper;
+
+	@Autowired
+	EventService eventService;
 	
 	@Autowired
-	EventRepository eventRepository;
-	
-	@Autowired
-	EventMapper eventMapper;
-	
-	@Autowired
-	TicketRepository ticketRepository;
-	
-	@Autowired
-	TicketMapper ticketMapper;
+	TicketService ticketService;
 	
 	@Override
 	public List<LocationWithEventsDTO> getAllLocation() {
@@ -56,10 +48,8 @@ public class LocationServiceImpl implements LocationService{
 	@Override
 	public List<LocationSeatsDTO> getAvailableSeatsForEvent(long eventId) {
 	  
-	    EventDTO event = eventMapper.entityToDto(eventRepository.findById(eventId)
-	            .orElseThrow(() -> new RuntimeException("Evento non trovato con ID: " + eventId)));
+	    EventDTO event = eventService.getEventById(eventId);
 
-	   
 	    long locationId = event.getLocation().getId();
 
 	    // Per prendere tutti i seat dispinibili per quell'evento.
@@ -67,9 +57,8 @@ public class LocationServiceImpl implements LocationService{
 	            .stream().map(locationMapper::entityToLocationSeatsDTODTO).toList();
 	         
 
-	    // Per prendere tutti i ticket quindi tutti i seat presi.
-	    List<TicketsEmptySeatDTO> allTickets = ticketRepository.findAll()
-	            .stream().map(ticketMapper::entityToDtoTicketsEmptySeatDTO).toList();
+	    // Per prendere tutti i seat occupati per quell'evento
+	    List<TicketsEmptySeatDTO> allTickets = ticketService.getAllTicketByEventId(eventId);
 
 	    
 	    // Per prendere tutti i posti presenti e immagazzinarli nella lista ticket.

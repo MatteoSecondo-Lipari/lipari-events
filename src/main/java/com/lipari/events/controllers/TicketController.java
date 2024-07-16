@@ -56,8 +56,8 @@ public class TicketController {
 		return ticketService.getAllByCustomerId(customerEntity);
 	}
 	
-	@GetMapping("/all")
-	public List<TicketsEmptySeatDTO> allseats(){
-		return ticketService.getAll();
+	@GetMapping("/all/{event}")
+	public List<TicketsEmptySeatDTO> allseatsByEventId(@PathVariable long event){
+		return ticketService.getAllTicketByEventId(event);
 	}
 }

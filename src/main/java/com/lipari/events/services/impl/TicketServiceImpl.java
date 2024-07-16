@@ -35,8 +35,8 @@ public class TicketServiceImpl implements TicketService{
 	}
 
 	@Override
-	public List<TicketsEmptySeatDTO> getAll(){
-		return ticketRepository.findAll().stream()
+	public List<TicketsEmptySeatDTO> getAllTicketByEventId(long eventid){
+		return ticketRepository.findByEventId(eventid).stream()
 				.map(ticketMapper::entityToDtoTicketsEmptySeatDTO).toList();
 	}
 	

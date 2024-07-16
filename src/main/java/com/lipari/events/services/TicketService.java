@@ -12,6 +12,6 @@ public interface TicketService {
 	
 	public List<TicketOrdersDTO> getAllByCustomerId(CustomerEntity customer);
 	
-	public List<TicketsEmptySeatDTO> getAll();
+	public List<TicketsEmptySeatDTO> getAllTicketByEventId(long eventid);
 	
 }
