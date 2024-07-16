@@ -11,9 +11,9 @@ import com.lipari.events.mappers.EventMapper;
 import com.lipari.events.models.EntertainerDTO;
 
 import com.lipari.events.models.EventDTO;
+
 import com.lipari.events.models.EventWithSubcategoryWithoutloopDTO;
 import com.lipari.events.models.constraints.EventConstraintsDTO;
-import com.lipari.events.repositories.EntertainerRepository;
 import com.lipari.events.repositories.EventRepository;
 import com.lipari.events.repositories.UserRepository;
 import com.lipari.events.services.EventService;
@@ -64,6 +64,7 @@ public class EventServiceImpl implements EventService {
 				.map(eventMapper::EntitySearchWithoutLooptoDto).toList();
 	}
 	
+
 	@Override
 	public List<EventWithSubcategoryWithoutloopDTO> getTop20newestEvents(){
 		return eventRepository.findTop20ByDateOrderDesc().stream()
@@ -86,4 +87,7 @@ public class EventServiceImpl implements EventService {
 		
 		return true;
 	}
+
 }
+
+

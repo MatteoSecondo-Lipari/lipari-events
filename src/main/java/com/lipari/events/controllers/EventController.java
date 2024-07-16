@@ -30,6 +30,7 @@ import com.lipari.events.models.EntertainerDTO;
 import com.lipari.events.models.EventDTO;
 
 import com.lipari.events.models.EntertainerNNEventsDTO;
+import com.lipari.events.models.EventStatsDashboardDTO;
 import com.lipari.events.models.EventWithSubcategoryWithoutloopDTO;
 import com.lipari.events.models.SearchResultsDTO;
 
@@ -47,6 +48,8 @@ import com.lipari.events.services.EventsEntertainersService;
 import com.lipari.events.services.ImageService;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/event")
@@ -173,4 +176,5 @@ public class EventController {
 	public List<EventWithSubcategoryWithoutloopDTO> newest(){
 		return eventService.getTop20newestEvents();
 	}
+
 }

@@ -3,7 +3,10 @@ package com.lipari.events.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+
 import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,8 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lipari.events.entities.EntertainerEntity;
 import com.lipari.events.models.EntertainerDTO;
+
+import com.lipari.events.models.EventStatsDashboardDTO;
+
 import com.lipari.events.payload.MessageResponse;
 import com.lipari.events.repositories.UserRepository;
+
 import com.lipari.events.security.user_details.UserDetailsImpl;
 import com.lipari.events.services.EntertainerService;
 import com.lipari.events.services.StripeRequestsStorageService;
@@ -51,12 +58,23 @@ public class EntertainerController {
 	}
 	
 	@PreAuthorize("hasAnyRole('ROLE_ENTERTAINER')")
+
+	@GetMapping("/dashboard")
+	 public List<EventStatsDashboardDTO> getAllEventStatistics() {
+  		 long entertainer_id = userDetailsImpl.getId();
+		
+		 List<EventStatsDashboardDTO> statistics = entertainerService.getEventStatistics(entertainer_id);
+		 return statistics;
+	    }
+
 	@GetMapping("/onboarding")
 	public ResponseEntity<?> onboarding() {
+
 		
 		UserDetailsImpl userDetailsImpl = (UserDetailsImpl)SecurityContextHolder.getContext().
 				getAuthentication().getPrincipal();
 		
+
 		EntertainerEntity entertainer = userRepository.findByEmail(userDetailsImpl.getEmail())
 				.get().getEntertainer();
 		
