@@ -6,16 +6,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class LocationWithEventsDTO {
 
-	private int id;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class EntertainerNNEventsDTO {
+
 	
-	private String city;
+
+	private String stageName;
+
+	private List<EventWithSubcategoryWithoutloopDTO> events;
 	
-	private String address;
 	
-	private List<EventWithoutLocationDTO> events;
 }

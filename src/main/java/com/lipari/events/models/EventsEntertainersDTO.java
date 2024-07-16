@@ -1,7 +1,5 @@
 package com.lipari.events.models;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,13 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LocationWithEventsDTO {
+public class EventsEntertainersDTO {
 
-	private int id;
+	private long id;
 	
-	private String city;
+	private EventDTO event;
 	
-	private String address;
+	private EntertainerDTO entertainer;
 	
-	private List<EventWithoutLocationDTO> events;
+	private float percentage;
 }

@@ -1,6 +1,6 @@
 package com.lipari.events.models;
 
-import java.util.List;
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LocationWithEventsDTO {
+public class TicketOrdersDTO {
 
 	private int id;
 	
-	private String city;
+	private LocalDate purchaseDate;
 	
-	private String address;
+	private SeatDTO seat;
 	
-	private List<EventWithoutLocationDTO> events;
+	private EventWithSubcategoryWithoutloopDTO event;
 }

@@ -1,21 +1,19 @@
 package com.lipari.events.models;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LocationWithEventsDTO {
+public class SeatDTO {
 
 	private int id;
 	
-	private String city;
-	
-	private String address;
-	
-	private List<EventWithoutLocationDTO> events;
+	@Getter
+	@Setter
+	private String number;
 }

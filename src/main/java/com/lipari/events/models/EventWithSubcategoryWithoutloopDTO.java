@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventDTO {
+public class EventWithSubcategoryWithoutloopDTO {
 
 	private long id;
 	
@@ -21,9 +21,5 @@ public class EventDTO {
 	
 	private LocationDTO location;
 	
-	private EventSubcategoryDTO subcategory;
-	
-	private float ticketPrice;
-	
-	private float numberedTicketPrice;
+	private EventsSubcategoryWithoutEventsDTO subcategory;
 }

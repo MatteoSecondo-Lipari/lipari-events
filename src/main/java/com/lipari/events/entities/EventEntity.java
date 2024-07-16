@@ -10,13 +10,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,8 +39,14 @@ public class EventEntity {
 	
 	private String imagePath;
 	
+	@NotNull(message = "Must be not null")
+	private float ticketPrice;
+	
+	@NotNull(message = "Must be not null")
+	private float numberedTicketPrice;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "location_id")
+	@JoinColumn(name = "location_id", nullable = false)
 	private LocationEntity location;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -51,12 +56,7 @@ public class EventEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "event", cascade = CascadeType.REMOVE)
 	private List<TicketEntity> tickets;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(
-		name = "events_entertainers",
-		joinColumns = @JoinColumn(name = "event_id"),
-		inverseJoinColumns = @JoinColumn(name = "entertainer_id")
-	)
-	private List<EntertainerEntity> entertainers;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "event", cascade = CascadeType.REMOVE)
+	private List<EventsEntertainersEntity> eventsEntertainers;
 	
 }

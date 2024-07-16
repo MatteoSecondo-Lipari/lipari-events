@@ -31,6 +31,6 @@ public class EventCategoryEntity {
 	private String name;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	@JoinColumn(name = "category_id")
+	@JoinColumn(name = "category_id", nullable = false)
 	private List<EventSubcategoryEntity> subcategories;
 }

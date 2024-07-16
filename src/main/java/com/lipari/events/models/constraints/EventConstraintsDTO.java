@@ -28,6 +28,12 @@ public class EventConstraintsDTO {
 	private LocalDate date;
 	
 	@NotNull(message = "Must be not null")
+	private float ticketPrice;
+	
+	@NotNull(message = "Must be not null")
+	private float numberedTicketPrice;
+	
+	@NotNull(message = "Must be not null")
 	private LocationDTO location;
 	
 	@NotNull(message = "Must be not null")
