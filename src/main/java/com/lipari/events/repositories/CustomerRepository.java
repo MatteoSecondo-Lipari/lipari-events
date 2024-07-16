@@ -6,6 +6,6 @@ import com.lipari.events.entities.CustomerEntity;
 
 public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> {
 	
-	CustomerEntity findByUserEmail(String email);
+	public CustomerEntity findByUserEmail(String email);
 
 }

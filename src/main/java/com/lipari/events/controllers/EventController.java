@@ -67,13 +67,13 @@ public class EventController {
 	@Autowired
 	EntertainerMapper entertainerMapper;
 
-  @Autowired
+	@Autowired
 	EntertainerService entertainerService;
 
 
-	@PreAuthorize("hasAnyRole('ROLE_ENTERTAINER','ROLE_ADMIN')")
+	@PreAuthorize("hasAnyRole('ROLE_ENTERTAINER')")
 	@PostMapping(path = "/save", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-	public ResponseEntity<?> create(
+	public ResponseEntity<?> createEvent(
 			@RequestPart MultipartFile image,
 			@RequestPart @Valid EventConstraintsDTO event) {
 		
