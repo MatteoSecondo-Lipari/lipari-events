@@ -5,6 +5,7 @@ import java.util.List;
 import com.lipari.events.entities.EntertainerEntity;
 import com.lipari.events.models.EntertainerDTO;
 import com.lipari.events.models.EntertainerNNEventsDTO;
+import com.lipari.events.models.EventStatsDashboardDTO;
 import com.lipari.events.models.constraints.EntertainerConstraintsDTO;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Account;
@@ -24,4 +25,8 @@ public interface EntertainerService {
   
 	public List<EntertainerNNEventsDTO> getEventWithEntertainers(String entertainers);
   
+	public List<EventStatsDashboardDTO> getEventStatistics(long event_id);
+	
+	public EventStatsDashboardDTO mapToEventStatsDashboardDTO(Object[] result);
+
 }
