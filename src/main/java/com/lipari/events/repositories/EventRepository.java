@@ -37,7 +37,9 @@ public interface EventRepository extends JpaRepository<EventEntity, Long>{
 	            "    tickets ticket ON ticket.event_id = events.id " +
 	            "JOIN " +
 	            "    seats seat ON ticket.seat_id = seat.id " +
+	            "WHERE events.id = :events_id " +
 	            "GROUP BY " +
 	            "    events.id", nativeQuery = true)
-	    List<EventStatsDashboardDTO> getEventStatistics();
+	 	//In questo modo possiamo salvare tutte le table come oggetti non definiti.
+	    List<Object[]> getEventStatistics(long events_id);
 }

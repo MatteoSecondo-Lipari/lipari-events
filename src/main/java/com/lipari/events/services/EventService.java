@@ -17,5 +17,7 @@ public interface EventService {
 	
 	public List<EventWithSubcategoryWithoutloopDTO> getEventWithName(String name);
 	
-	public List<EventStatsDashboardDTO> getEventStatistics();
+	public List<EventStatsDashboardDTO> getEventStatistics(long event_id);
+	
+	public EventStatsDashboardDTO mapToEventStatsDashboardDTO(Object[] result);
 }
