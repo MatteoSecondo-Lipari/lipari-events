@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.lipari.events.entities.EntertainerEntity;
 import com.lipari.events.mappers.EntertainerMapper;
 import com.lipari.events.models.EntertainerDTO;
+import com.lipari.events.models.EntertainerNNEventsDTO;
 import com.lipari.events.models.constraints.EntertainerConstraintsDTO;
 import com.lipari.events.repositories.EntertainerRepository;
 import com.lipari.events.services.EntertainerService;
@@ -49,6 +50,12 @@ public class EntertainerServiceImpl implements EntertainerService {
 	public List<EntertainerDTO> getEntertainerByStageName(String stageName) {
 		return entertainerRepository.getByStageNameStartingWith(stageName).stream()
 				.map(entertainerMapper::entityToDto).toList();
+	}
+	
+	@Override
+	public List<EntertainerNNEventsDTO> getEventWithEntertainers(String entertainers) {
+		return entertainerRepository.getByStageNameStartingWith(entertainers).stream()
+				.map(entertainerMapper::entityNNToDto).toList();
 	}
 
 	@Override

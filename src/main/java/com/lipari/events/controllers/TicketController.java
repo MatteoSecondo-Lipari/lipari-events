@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -34,6 +36,10 @@ import com.stripe.model.EventDataObjectDeserializer;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.StripeObject;
 import com.stripe.net.Webhook;
+import com.lipari.events.mappers.CustomerMapper;
+import com.lipari.events.models.TicketOrdersDTO;
+import com.lipari.events.models.TicketsEmptySeatDTO;
+import com.lipari.events.services.CustomerService;
 
 @RestController
 @RequestMapping("/ticket")
@@ -156,6 +162,35 @@ public class TicketController {
 		}
 
 		return ResponseEntity.ok().build();
+	}
+	
+	@Autowired
+	TicketService ticketService;
+	
+	@Autowired
+	CustomerService customerService;
+	
+	@Autowired
+	CustomerMapper customerMapper;
+	
+	//Manca che preleva automaticamente l'email dell'user loggato.
+	
+	@GetMapping("/orders")
+	public List<TicketOrdersDTO> Orders ()
+	{
+		// {email}
+		//@PathVariable String email
+		UserDetailsImpl userDetailsImpl = (UserDetailsImpl)SecurityContextHolder.getContext().
+				getAuthentication().getPrincipal();
+		
+		CustomerDTO customerDTO = customerService.getCustomerByEmail(userDetailsImpl.getEmail());
+		CustomerEntity customerEntity = customerMapper.dtoToEntity(customerDTO);
+		return ticketService.getAllByCustomerId(customerEntity);
+	}
+	
+	@GetMapping("/all/{event}")
+	public List<TicketsEmptySeatDTO> allseatsByEventId(@PathVariable long event){
+		return ticketService.getAllTicketByEventId(event);
 	}
 
 }

@@ -72,6 +72,10 @@ public class WebSecurityConfig {
 					.requestMatchers("/location/all").permitAll()
 					.requestMatchers("/ticket/checkout-webhook").permitAll()
 					.requestMatchers("/entertainer/onboarding-webhook").permitAll()
+					.requestMatchers("/event/searchbar/{search}").permitAll()
+					.requestMatchers("/event/newest").permitAll()
+					.requestMatchers("/location/seats/{event}").permitAll()
+					.requestMatchers("/ticket/all/{event}").permitAll()
 					.anyRequest().authenticated()
 			);
 		

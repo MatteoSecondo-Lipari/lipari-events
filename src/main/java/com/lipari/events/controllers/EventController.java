@@ -3,6 +3,7 @@ package com.lipari.events.controllers;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +23,25 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import com.lipari.events.entities.EntertainerEntity;
 import com.lipari.events.mappers.EntertainerMapper;
 import com.lipari.events.models.EntertainerDTO;
 import com.lipari.events.models.EventDTO;
+
+import com.lipari.events.models.EntertainerNNEventsDTO;
+import com.lipari.events.models.EventWithSubcategoryWithoutloopDTO;
+import com.lipari.events.models.SearchResultsDTO;
+
 import com.lipari.events.models.constraints.EventConstraintsDTO;
 import com.lipari.events.models.constraints.EventsEntertainersConstraintsDTO;
 import com.lipari.events.payload.MessageResponse;
+
 import com.lipari.events.repositories.UserRepository;
 import com.lipari.events.security.user_details.UserDetailsImpl;
+
+import com.lipari.events.services.EntertainerService;
+
 import com.lipari.events.services.EventService;
 import com.lipari.events.services.EventsEntertainersService;
 import com.lipari.events.services.ImageService;
@@ -55,6 +66,10 @@ public class EventController {
 	
 	@Autowired
 	EntertainerMapper entertainerMapper;
+
+  @Autowired
+	EntertainerService entertainerService;
+
 
 	@PreAuthorize("hasAnyRole('ROLE_ENTERTAINER','ROLE_ADMIN')")
 	@PostMapping(path = "/save", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
@@ -140,4 +155,22 @@ public class EventController {
         }
     }
 	
+	@GetMapping("/searchbar/{search}")
+	public ResponseEntity<SearchResultsDTO> search(@PathVariable String search) {
+        List<EventWithSubcategoryWithoutloopDTO> events = eventService.getEventWithName(search);
+        List<EntertainerNNEventsDTO> entertainers = entertainerService.getEventWithEntertainers(search);
+
+        if (events.isEmpty() && entertainers.isEmpty()) {
+        	SearchResultsDTO nothing = new SearchResultsDTO(events, entertainers);
+        	return ResponseEntity.ok(nothing);
+        }
+
+        SearchResultsDTO results = new SearchResultsDTO(events, entertainers);
+        return ResponseEntity.ok(results);
+    }
+	
+	@GetMapping("/newest")
+	public List<EventWithSubcategoryWithoutloopDTO> newest(){
+		return eventService.getTop20newestEvents();
+	}
 }

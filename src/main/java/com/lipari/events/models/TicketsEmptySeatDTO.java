@@ -9,11 +9,17 @@ import lombok.Setter;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SeatDTO {
-
+public class TicketsEmptySeatDTO {
+	
+	@Getter
+	@Setter
 	private int id;
 	
 	@Getter
 	@Setter
-	private String number;
+	private SeatDTO seat;
+	
+	@Getter
+	@Setter
+	private EventWithSubcategoryWithoutloopDTO event;
 }

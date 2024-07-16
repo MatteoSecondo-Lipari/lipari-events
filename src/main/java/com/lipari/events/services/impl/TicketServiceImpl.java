@@ -16,6 +16,12 @@ import com.stripe.exception.StripeException;
 import com.stripe.param.TransferCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
 
+import com.lipari.events.entities.CustomerEntity;
+import com.lipari.events.mappers.CustomerMapper;
+
+import com.lipari.events.models.TicketOrdersDTO;
+import com.lipari.events.models.TicketsEmptySeatDTO;
+
 @Service
 public class TicketServiceImpl implements TicketService {
 	
@@ -24,6 +30,9 @@ public class TicketServiceImpl implements TicketService {
 	
 	@Autowired
 	TicketMapper ticketMapper;
+  
+  @Autowired 
+	CustomerMapper customerMapper;
 
 	@Override
 	public String checkout(List<TicketDTO> tickets, long price, String transferGroup) throws StripeException {
@@ -102,4 +111,18 @@ public class TicketServiceImpl implements TicketService {
 		return ticketRepository.countBySeatIsNotNullAndEventId(id);
 	}
 
+}
+
+	@Override
+	public List<TicketOrdersDTO> getAllByCustomerId(CustomerEntity customer) {
+		return ticketRepository.findByCustomer(customer).stream()
+				.map(ticketMapper::entityToDtoTicketOrdersDTO).toList();
+	}
+
+	@Override
+	public List<TicketsEmptySeatDTO> getAllTicketByEventId(long eventid){
+		return ticketRepository.findByEventId(eventid).stream()
+				.map(ticketMapper::entityToDtoTicketsEmptySeatDTO).toList();
+	}
+	
 }

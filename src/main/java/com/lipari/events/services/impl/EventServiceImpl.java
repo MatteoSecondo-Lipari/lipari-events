@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import com.lipari.events.entities.EventEntity;
 import com.lipari.events.mappers.EventMapper;
 import com.lipari.events.models.EntertainerDTO;
+
 import com.lipari.events.models.EventDTO;
+import com.lipari.events.models.EventWithSubcategoryWithoutloopDTO;
 import com.lipari.events.models.constraints.EventConstraintsDTO;
 import com.lipari.events.repositories.EntertainerRepository;
 import com.lipari.events.repositories.EventRepository;
@@ -26,6 +28,12 @@ public class EventServiceImpl implements EventService {
 	@Autowired
 	EntertainerRepository entertainerRepository;
 	
+	@Autowired
+	UserRepository userRepository;
+	
+	@Autowired
+	EntertainerMapper entertainerMapper;
+
 	@Override
 	public EventDTO createEvent(EventConstraintsDTO event, String imagePath) {
 		EventEntity ee = eventMapper.constraintsDtoToEntity(event);
@@ -46,6 +54,18 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public EventDTO getEventDTOById(long id) {
 		return eventMapper.entityToDto(eventRepository.findById(id).orElseThrow());
+	}
+	
+	@Override
+	public List<EventWithSubcategoryWithoutloopDTO> getEventWithName(String name) {
+		return eventRepository.findEventByNameStartingWith(name).stream()
+				.map(eventMapper::EntitySearchWithoutLooptoDto).toList();
+	}
+	
+	@Override
+	public List<EventWithSubcategoryWithoutloopDTO> getTop20newestEvents(){
+		return eventRepository.findTop20ByDateOrderDesc().stream()
+				.map(eventMapper::EntitySearchWithoutLooptoDto).toList();
 	}
 
 	@Override
