@@ -19,9 +19,9 @@ public interface EntertainerMapper {
 	
 	public EntertainerEntity costraintsDtoToEntity(EntertainerConstraintsDTO dto);
 	
-	 @Mapping(target = "events", source = "events")
+	 //@Mapping(target = "events", source = "events")
 	 public EntertainerNNEventsDTO entityNNToDto(EntertainerEntity entity);
 	    
-	 @Mapping(target = "events", source = "events")
+	 //@Mapping(target = "events", source = "events")
 	 public EntertainerEntity dtoNNToEntity(EntertainerNNEventsDTO dto);
 }

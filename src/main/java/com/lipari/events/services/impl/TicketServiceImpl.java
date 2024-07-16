@@ -111,7 +111,7 @@ public class TicketServiceImpl implements TicketService {
 		return ticketRepository.countBySeatIsNotNullAndEventId(id);
 	}
 
-}
+
 
 	@Override
 	public List<TicketOrdersDTO> getAllByCustomerId(CustomerEntity customer) {

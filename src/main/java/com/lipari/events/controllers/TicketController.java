@@ -165,9 +165,6 @@ public class TicketController {
 	}
 	
 	@Autowired
-	TicketService ticketService;
-	
-	@Autowired
 	CustomerService customerService;
 	
 	@Autowired
