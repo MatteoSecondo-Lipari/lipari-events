@@ -61,6 +61,10 @@ public class EntertainerController {
 
 	@GetMapping("/dashboard")
 	 public List<EventStatsDashboardDTO> getAllEventStatistics() {
+		
+		UserDetailsImpl userDetailsImpl = (UserDetailsImpl)SecurityContextHolder.getContext().
+				getAuthentication().getPrincipal();
+		
   		 long entertainer_id = userDetailsImpl.getId();
 		
 		 List<EventStatsDashboardDTO> statistics = entertainerService.getEventStatistics(entertainer_id);

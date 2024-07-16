@@ -14,6 +14,7 @@ import com.lipari.events.models.EventDTO;
 
 import com.lipari.events.models.EventWithSubcategoryWithoutloopDTO;
 import com.lipari.events.models.constraints.EventConstraintsDTO;
+import com.lipari.events.repositories.EntertainerRepository;
 import com.lipari.events.repositories.EventRepository;
 import com.lipari.events.repositories.UserRepository;
 import com.lipari.events.services.EventService;
