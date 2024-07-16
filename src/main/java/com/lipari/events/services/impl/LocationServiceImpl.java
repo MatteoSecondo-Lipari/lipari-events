@@ -48,7 +48,7 @@ public class LocationServiceImpl implements LocationService{
 	@Override
 	public List<LocationSeatsDTO> getAvailableSeatsForEvent(long eventId) {
 	  
-	    EventDTO event = eventService.getEventById(eventId);
+	    EventDTO event = eventService.getEventDTOById(eventId);
 
 	    long locationId = event.getLocation().getId();
 

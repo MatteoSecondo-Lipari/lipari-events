@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lipari.events.entities.EventEntity;
+import com.lipari.events.mappers.EntertainerMapper;
 import com.lipari.events.mappers.EventMapper;
 import com.lipari.events.models.EntertainerDTO;
 
@@ -14,6 +15,7 @@ import com.lipari.events.models.EventWithSubcategoryWithoutloopDTO;
 import com.lipari.events.models.constraints.EventConstraintsDTO;
 import com.lipari.events.repositories.EntertainerRepository;
 import com.lipari.events.repositories.EventRepository;
+import com.lipari.events.repositories.UserRepository;
 import com.lipari.events.services.EventService;
 
 @Service
