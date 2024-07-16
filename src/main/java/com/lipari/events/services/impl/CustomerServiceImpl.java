@@ -12,8 +12,6 @@ import com.lipari.events.models.constraints.CustomerConstraintsDTO;
 import com.lipari.events.repositories.CustomerRepository;
 import com.lipari.events.services.CustomerService;
 
-import jakarta.persistence.EntityNotFoundException;
-
 @Service
 public class CustomerServiceImpl implements CustomerService {
 	
