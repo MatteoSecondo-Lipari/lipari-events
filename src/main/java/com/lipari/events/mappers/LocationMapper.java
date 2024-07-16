@@ -5,6 +5,7 @@ import org.mapstruct.Mapper;
 
 import com.lipari.events.entities.LocationEntity;
 import com.lipari.events.models.LocationDTO;
+import com.lipari.events.models.LocationSeatsDTO;
 import com.lipari.events.models.LocationWithEventsDTO;
 import com.lipari.events.models.constraints.LocationConstraintsDTO;
 
@@ -22,5 +23,12 @@ public interface LocationMapper {
 	public LocationWithEventsDTO entityToLocationWithEventsDTO(LocationEntity entity);
 	
 	public LocationEntity dtoLocationWithEventsToEntity(LocationWithEventsDTO dto);
+	
+	public LocationSeatsDTO entityToLocationSeatsDTODTO(LocationEntity entity);
+	
+	public LocationEntity dtoLocationSeatsDTOToEntity(LocationSeatsDTO dto);
+	
+	
+	
 	
 }

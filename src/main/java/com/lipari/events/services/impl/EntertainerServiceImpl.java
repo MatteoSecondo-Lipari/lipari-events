@@ -13,6 +13,12 @@ import com.lipari.events.models.EventStatsDashboardDTO;
 import com.lipari.events.models.constraints.EntertainerConstraintsDTO;
 import com.lipari.events.repositories.EntertainerRepository;
 import com.lipari.events.services.EntertainerService;
+import com.stripe.StripeClient;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Account;
+import com.stripe.model.AccountLink;
+import com.stripe.param.AccountCreateParams;
+import com.stripe.param.AccountLinkCreateParams;
 
 @Service
 public class EntertainerServiceImpl implements EntertainerService {
@@ -24,7 +30,7 @@ public class EntertainerServiceImpl implements EntertainerService {
 	EntertainerMapper entertainerMapper;
 
 	@Override
-	public EntertainerDTO createOrUpdateEntertainer(EntertainerConstraintsDTO entertainer) {
+	public EntertainerDTO createEntertainer(EntertainerConstraintsDTO entertainer) {
 		EntertainerEntity ee = entertainerMapper.costraintsDtoToEntity(entertainer);
 		return entertainerMapper.entityToDto(entertainerRepository.save(ee));
 	}
@@ -78,5 +84,35 @@ public class EntertainerServiceImpl implements EntertainerService {
             ((Number) result[10]).floatValue() // total_revenue
         );
     }
+
+	@Override
+	public Account createStripeAccount() throws StripeException {
+		StripeClient client = new StripeClient("sk_test_51OrGCUGjZ7RLeJMqT3ykVjC3DJmA0w3YxBCsBRJEmqpo6U493CM8368ug0bWxxjQqimkU30mi0ZSq9Y89PFWedqS00PRErjXsK");
+
+		AccountCreateParams params =
+		  AccountCreateParams.builder().setType(AccountCreateParams.Type.EXPRESS).build();
+
+		return client.accounts().create(params);
+	}
+
+	@Override
+	public AccountLink linkToOnboarding(String accountId) throws StripeException {
+		StripeClient client = new StripeClient("sk_test_51OrGCUGjZ7RLeJMqT3ykVjC3DJmA0w3YxBCsBRJEmqpo6U493CM8368ug0bWxxjQqimkU30mi0ZSq9Y89PFWedqS00PRErjXsK");
+
+		AccountLinkCreateParams params =
+		  AccountLinkCreateParams.builder()
+		    .setAccount(accountId)
+		    .setRefreshUrl("http://localhost:4200")
+		    .setReturnUrl("http://localhost:4200")
+		    .setType(AccountLinkCreateParams.Type.ACCOUNT_ONBOARDING)
+		    .build();
+
+		return client.accountLinks().create(params);
+	}
+
+	@Override
+	public EntertainerDTO updateEntertainer(EntertainerEntity entertainer) {
+		return entertainerMapper.entityToDto(entertainerRepository.save(entertainer));
+	}
 
 }

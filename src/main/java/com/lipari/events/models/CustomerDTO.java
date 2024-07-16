@@ -28,4 +28,9 @@ public class CustomerDTO {
 	private LocalDate birthDate;
 	
 	private UserDTO user;
+
+	public CustomerDTO(long id) {
+		super();
+		this.id = id;
+	}
 }

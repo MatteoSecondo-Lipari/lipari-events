@@ -8,7 +8,7 @@ import com.lipari.events.models.EventWithSubcategoryWithoutloopDTO;
 import com.lipari.events.models.EventWithoutSubcategoryDTO;
 import com.lipari.events.models.constraints.EventConstraintsDTO;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = LocationMapper.class)
 public interface EventMapper {
 
 	public EventDTO entityToDto(EventEntity entity);

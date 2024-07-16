@@ -132,7 +132,7 @@ public class AuthController {
 			
 			userRepository.save(user);
 			signupRequest.getEntertainer().setUser(new UserDTO(user.getId()));
-			entertainerService.createOrUpdateEntertainer(signupRequest.getEntertainer());
+			entertainerService.createEntertainer(signupRequest.getEntertainer());
 		} else {
 			userRepository.save(user);
 		}

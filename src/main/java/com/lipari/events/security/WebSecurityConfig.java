@@ -70,9 +70,12 @@ public class WebSecurityConfig {
 					.requestMatchers("/entertainer/stage-name/**").permitAll()
 					.requestMatchers("/event/category/all-events").permitAll()
 					.requestMatchers("/location/all").permitAll()
-					.requestMatchers("/event/search/entertainer/{Entertainer}").permitAll()
-					.requestMatchers("/event/search/name/{name}").permitAll()
+					.requestMatchers("/ticket/checkout-webhook").permitAll()
+					.requestMatchers("/entertainer/onboarding-webhook").permitAll()
 					.requestMatchers("/event/searchbar/{search}").permitAll()
+					.requestMatchers("/event/newest").permitAll()
+					.requestMatchers("/location/seats/{event}").permitAll()
+					.requestMatchers("/ticket/all/{event}").permitAll()
 					.anyRequest().authenticated()
 			);
 		
