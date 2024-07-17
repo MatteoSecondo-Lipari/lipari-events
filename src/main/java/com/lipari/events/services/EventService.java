@@ -10,11 +10,14 @@ import com.lipari.events.models.constraints.EventConstraintsDTO;
 
 public interface EventService {
 
-	public EventDTO createEvent(EventConstraintsDTO event, String imagePath);
+	public EventDTO createOrUpdateEvent(EventConstraintsDTO event, String imagePath);
 	
-	public List<EventDTO> getAllEvents();
+	public List<EventWithSubcategoryWithoutloopDTO> getAllEvents();
 	public EventDTO getEventDTOById(long id);
+	public EventWithSubcategoryWithoutloopDTO getEventWithSubcategoryWithoutloopDTOById(long id);
 	public EventEntity getEventEntityById(long id);
+	
+	public boolean deleteEvent(long id);
 
 	public boolean isPresentEntertainersStripeAccount(List<EntertainerDTO> entertainers);
 	
