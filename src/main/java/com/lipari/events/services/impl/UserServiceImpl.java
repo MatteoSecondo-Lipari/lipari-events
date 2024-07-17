@@ -1,5 +1,7 @@
 package com.lipari.events.services.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +38,28 @@ public class UserServiceImpl implements UserService {
 		UserEntity ue = userMapper.userWithPasswordDtoToEntity(user);
 		userRepository.save(ue);
 		
+		return true;
+	}
+
+	@Override
+	public List<FullUserDTO> getAll() {
+		return userRepository.findAll()
+				.stream().map(userMapper::entityToFullDto).toList();
+	}
+
+	@Override
+	public FullUserDTO getById(long id) {
+		return userMapper.entityToFullDto(userRepository.findById(id).orElse(null));
+	}
+
+	@Override
+	public boolean deleteById(long id) {
+		
+		if(!userRepository.existsById(id)) {
+			return false;
+		}
+		
+		userRepository.deleteById(id);
 		return true;
 	}
 

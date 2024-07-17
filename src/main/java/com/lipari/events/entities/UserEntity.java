@@ -39,7 +39,7 @@ public class UserEntity {
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
 	private CustomerEntity customer;
 	
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
 	private EntertainerEntity entertainer;
 	
 	public UserEntity(@Email @NotBlank @Size(max = 50) String email, @NotBlank @Size(max = 120) String password) {

@@ -7,27 +7,25 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Service;
 
 import com.lipari.events.entities.EntertainerEntity;
-import com.lipari.events.models.TicketDTO;
+import com.lipari.events.models.constraints.TicketConstraintsDTO;
 import com.lipari.events.services.StripeRequestsStorageService;
 
 @Service
 public class StripeOrderInfoServiceImpl implements StripeRequestsStorageService {
 
 	//key=stripe_transferGroup
-	private Map<String, List<TicketDTO>> unprocessedTicketsQueue = new ConcurrentHashMap<>();
+	private Map<String, List<TicketConstraintsDTO>> unprocessedTicketsQueue = new ConcurrentHashMap<>();
 	
 	//key=stripe_accountId
 	private Map<String, EntertainerEntity> entertainers = new ConcurrentHashMap<>();
 	
-	//TODO: manage all methods with if statement to check operations results
-	
 	@Override
-	public void addTicketsToQueue(String key, List<TicketDTO> tickets) {
+	public void addTicketsToQueue(String key, List<TicketConstraintsDTO> tickets) {
 		unprocessedTicketsQueue.put(key, tickets);
 	}
 
 	@Override
-	public List<TicketDTO> getTicketsFromQueue(String key) {
+	public List<TicketConstraintsDTO> getTicketsFromQueue(String key) {
 		return unprocessedTicketsQueue.get(key);
 	}
 

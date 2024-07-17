@@ -21,6 +21,7 @@ import com.lipari.events.mappers.CustomerMapper;
 
 import com.lipari.events.models.TicketOrdersDTO;
 import com.lipari.events.models.TicketsEmptySeatDTO;
+import com.lipari.events.models.constraints.TicketConstraintsDTO;
 
 @Service
 public class TicketServiceImpl implements TicketService {
@@ -35,7 +36,7 @@ public class TicketServiceImpl implements TicketService {
 	CustomerMapper customerMapper;
 
 	@Override
-	public String checkout(List<TicketDTO> tickets, long price, String transferGroup) throws StripeException {
+	public String checkout(List< TicketConstraintsDTO> tickets, long price, String transferGroup) throws StripeException {
 		StripeClient client = new StripeClient("sk_test_51OrGCUGjZ7RLeJMqT3ykVjC3DJmA0w3YxBCsBRJEmqpo6U493CM8368ug0bWxxjQqimkU30mi0ZSq9Y89PFWedqS00PRErjXsK");
 
 		SessionCreateParams params =
@@ -68,14 +69,20 @@ public class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public boolean saveAll(List<TicketDTO> tickets) {
-		List<TicketEntity> ticketsE =  ticketMapper.dtosToEntities(tickets);
+	public boolean saveAll(List<TicketConstraintsDTO> tickets) {
+		List<TicketEntity> ticketsE =  ticketMapper.constraintsDtosToEntities(tickets);
 		
 		if(ticketRepository.saveAll(ticketsE) == null) {
 			return false;
 		}
 		
 		return true;
+	}
+	
+	@Override
+	public TicketDTO updateTicket(TicketConstraintsDTO ticket) {
+		TicketEntity te = ticketMapper.constraintDtoToEntity(ticket);
+		return ticketMapper.entityToDto(ticketRepository.save(te));
 	}
 
 	@Override
@@ -123,6 +130,17 @@ public class TicketServiceImpl implements TicketService {
 	public List<TicketsEmptySeatDTO> getAllTicketByEventId(long eventid){
 		return ticketRepository.findByEventId(eventid).stream()
 				.map(ticketMapper::entityToDtoTicketsEmptySeatDTO).toList();
+	}
+
+	@Override
+	public boolean deleteById(long id) {
+
+		if(!ticketRepository.existsById(id)) {
+			return false;
+		}
+		
+		ticketRepository.deleteById(id);
+		return true;
 	}
 	
 }

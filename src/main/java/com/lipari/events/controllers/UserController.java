@@ -1,15 +1,22 @@
 package com.lipari.events.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lipari.events.models.FullUserDTO;
 import com.lipari.events.models.UserWithPasswordDTO;
 import com.lipari.events.payload.ChangePasswordRequest;
 import com.lipari.events.payload.MessageResponse;
@@ -63,4 +70,29 @@ public class UserController {
 		return ResponseEntity.ok(new MessageResponse("Password updated successfully", 200));
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+	@GetMapping("/all")
+	public List<FullUserDTO> getall() {
+		return userService.getAll();
+	}
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+	@GetMapping("/{id}")
+	public FullUserDTO getById(@PathVariable long id) {
+		return userService.getById(id);
+	}
+
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<?> deleteUser(@PathVariable long id) {
+
+		if(!userService.deleteById(id)) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+					new MessageResponse("User not existing", 404));
+		}
+
+		return ResponseEntity.ok().body(
+				new MessageResponse("User deleted successfully", 200));
+	}
+
 }

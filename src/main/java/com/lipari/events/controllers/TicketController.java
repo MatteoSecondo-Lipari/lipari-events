@@ -10,9 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,12 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lipari.events.entities.CustomerEntity;
 import com.lipari.events.entities.EventEntity;
+import com.lipari.events.mappers.CustomerMapper;
 import com.lipari.events.models.CustomerDTO;
+import com.lipari.events.models.ERole;
 import com.lipari.events.models.EventDTO;
-import com.lipari.events.models.TicketDTO;
+import com.lipari.events.models.TicketOrdersDTO;
+import com.lipari.events.models.TicketsEmptySeatDTO;
+import com.lipari.events.models.constraints.TicketConstraintsDTO;
 import com.lipari.events.payload.MessageResponse;
 import com.lipari.events.repositories.UserRepository;
 import com.lipari.events.security.user_details.UserDetailsImpl;
+import com.lipari.events.services.CustomerService;
 import com.lipari.events.services.EventService;
 import com.lipari.events.services.StripeRequestsStorageService;
 import com.lipari.events.services.TicketService;
@@ -36,10 +43,9 @@ import com.stripe.model.EventDataObjectDeserializer;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.StripeObject;
 import com.stripe.net.Webhook;
-import com.lipari.events.mappers.CustomerMapper;
-import com.lipari.events.models.TicketOrdersDTO;
-import com.lipari.events.models.TicketsEmptySeatDTO;
-import com.lipari.events.services.CustomerService;
+
+import jakarta.validation.Valid;
+
 
 @RestController
 @RequestMapping("/ticket")
@@ -53,14 +59,19 @@ public class TicketController {
 	
 	@Autowired
 	EventService eventService;
+	
+	@Autowired
+	CustomerService customerService;
+	
+	@Autowired
+	CustomerMapper customerMapper;
 
 	@Autowired
 	StripeRequestsStorageService stripeRequestsStorageService;
 
-	@PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
+	@PreAuthorize("hasAnyRole('ROLE_CUSTOMER', 'ROLE_ADMIN')")
 	@PostMapping("/checkout")
-	public ResponseEntity<?> purchaseAndCreate(@RequestBody List<TicketDTO> tickets) {
-	
+	public ResponseEntity<?> purchaseAndCreate(@RequestBody List<@Valid TicketConstraintsDTO> tickets) {
 		long ticketPrice;
 		EventDTO event;
 
@@ -88,27 +99,51 @@ public class TicketController {
 			ticketPrice = (long)event.getNumberedTicketPrice() * 100;
 		}
 		
-		//tickets can be purchased
 		UserDetailsImpl userDetailsImpl = (UserDetailsImpl)SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
-		String email = userDetailsImpl.getEmail();
 		
-		CustomerEntity customerE = userRepository.findByEmail(email).get().getCustomer();
+		String authority = userDetailsImpl.getAuthorities()
+				.stream().findFirst().get().getAuthority();
 		
-		tickets.forEach(t -> {
-			t.setPurchaseDate(LocalDate.now());
-			t.setEvent(event);
-			t.setCustomer(new CustomerDTO(customerE.getId()));
-		});
-
-		try {
-			String key = UUID.randomUUID().toString();
-			stripeRequestsStorageService.addTicketsToQueue(key, tickets);
+		//tickets can be purchased
+		if(authority.equals(ERole.ROLE_CUSTOMER.name())) {
+			String email = userDetailsImpl.getEmail();
+			CustomerEntity customerE = userRepository.findByEmail(email).get().getCustomer();
 			
-			return ResponseEntity.ok(ticketService.checkout(tickets, ticketPrice, key));
-		} catch (StripeException e) {
-			return ResponseEntity.internalServerError().body(
-					new MessageResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
+			tickets.forEach(t -> {
+				t.setPurchaseDate(LocalDate.now());
+				t.setEvent(event);
+				t.setCustomer(new CustomerDTO(customerE.getId()));
+			});
+			
+			try {
+				String key = UUID.randomUUID().toString();
+				stripeRequestsStorageService.addTicketsToQueue(key, tickets);
+				
+				return ResponseEntity.ok(ticketService.checkout(tickets, ticketPrice, key));
+			} catch (StripeException e) {
+				return ResponseEntity.internalServerError().body(
+						new MessageResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
+			}
+		} else {
+			
+			if(tickets.getFirst().getCustomer() == null) {
+				return ResponseEntity.badRequest().body(
+						new MessageResponse("customer: Must be not null", 400));
+			}
+			
+			tickets.forEach(t -> {
+				t.setPurchaseDate(LocalDate.now());
+				t.setEvent(event);
+				t.setCustomer(tickets.getFirst().getCustomer());
+			});
+			
+			if(!ticketService.saveAll(tickets)) {
+				return ResponseEntity.internalServerError().body(
+						new MessageResponse("Something went wrong saving tickets", HttpStatus.INTERNAL_SERVER_ERROR.value()));
+			}
+			
+			return ResponseEntity.ok(new MessageResponse("Tickets saved successfully", 201));
 		}
 	}
 
@@ -140,7 +175,7 @@ public class TicketController {
 			PaymentIntent paymentIntent = (PaymentIntent) stripeObject;
 
 			String key = paymentIntent.getTransferGroup();
-			List<TicketDTO> tickets = stripeRequestsStorageService.getTicketsFromQueue(key);
+			List<TicketConstraintsDTO> tickets = stripeRequestsStorageService.getTicketsFromQueue(key);
 			
 			ticketService.saveAll(tickets);
 			
@@ -164,19 +199,8 @@ public class TicketController {
 		return ResponseEntity.ok().build();
 	}
 	
-	@Autowired
-	CustomerService customerService;
-	
-	@Autowired
-	CustomerMapper customerMapper;
-	
-	//Manca che preleva automaticamente l'email dell'user loggato.
-	
 	@GetMapping("/orders")
-	public List<TicketOrdersDTO> Orders ()
-	{
-		// {email}
-		//@PathVariable String email
+	public List<TicketOrdersDTO> Orders() {
 		UserDetailsImpl userDetailsImpl = (UserDetailsImpl)SecurityContextHolder.getContext().
 				getAuthentication().getPrincipal();
 		
@@ -188,6 +212,36 @@ public class TicketController {
 	@GetMapping("/all/{event}")
 	public List<TicketsEmptySeatDTO> allseatsByEventId(@PathVariable long event){
 		return ticketService.getAllTicketByEventId(event);
+	}
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+	@PutMapping("/update")
+	public ResponseEntity<?> putMethodName(@RequestBody @Valid TicketConstraintsDTO ticket) {
+		
+		if(ticket.getId() == 0) {
+			return ResponseEntity.badRequest().body(
+					new MessageResponse("id: Must not be null", 400));
+		}
+		
+		if(ticket.getCustomer() == null) {
+			return ResponseEntity.badRequest().body(
+					new MessageResponse("customer: Must not be null", 400));
+		}
+		
+		return ResponseEntity.ok(ticketService.updateTicket(ticket));
+	}
+	
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<?> deleteTicket(@PathVariable long id) {
+		
+		if(!ticketService.deleteById(id)) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+					new MessageResponse("Ticket not existing", 404));
+		}
+		
+		return ResponseEntity.ok().body(
+				new MessageResponse("Ticket deleted successfully", 200));
 	}
 
 }
