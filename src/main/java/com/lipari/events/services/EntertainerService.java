@@ -1,8 +1,10 @@
 package com.lipari.events.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.lipari.events.entities.EntertainerEntity;
+import com.lipari.events.entities.EventCategoryEntity;
 import com.lipari.events.models.EntertainerDTO;
 import com.lipari.events.models.EntertainerNNEventsDTO;
 import com.lipari.events.models.EventStatsDashboardDTO;
@@ -13,11 +15,6 @@ import com.stripe.model.AccountLink;
 
 public interface EntertainerService {
 
-	public EntertainerDTO createEntertainer(EntertainerConstraintsDTO entertainer);
-	public EntertainerDTO updateEntertainer(EntertainerEntity entertainer);
-	
-	public List<EntertainerDTO> getAllEntertainers();
-	public EntertainerDTO getEntertainerById();
 	public List<EntertainerDTO> getEntertainerByStageName(String stageName);
 
 	public Account createStripeAccount() throws StripeException;
@@ -28,5 +25,12 @@ public interface EntertainerService {
 	public List<EventStatsDashboardDTO> getEventStatistics(long event_id);
 	
 	public EventStatsDashboardDTO mapToEventStatsDashboardDTO(Object[] result);
+	
+	//CRUD
+	public List<EntertainerDTO> getAll();
+	public EntertainerDTO createEntertainer(EntertainerConstraintsDTO entertainer);
+	public Optional<EntertainerDTO> getById(long id);
+	public EntertainerDTO update(EntertainerEntity events);
+	public boolean delete(long id);
 
 }

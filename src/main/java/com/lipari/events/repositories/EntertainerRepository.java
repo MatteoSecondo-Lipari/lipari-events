@@ -1,6 +1,7 @@
 package com.lipari.events.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -45,4 +46,6 @@ public interface EntertainerRepository extends JpaRepository<EntertainerEntity, 
             "GROUP BY " +
             "    events.id", nativeQuery = true)
     List<Object[]> getEventStatistics(long entertainerId); // Cambiato il nome del parametro per riflettere :entertainerId
+    
+    Optional<EntertainerEntity> findById(long id);
 }

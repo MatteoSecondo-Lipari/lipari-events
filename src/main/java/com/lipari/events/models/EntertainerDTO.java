@@ -14,6 +14,8 @@ public class EntertainerDTO {
 
 	private String stageName;
 	
+	private String stripe_connected_account;
+	
 	private String type;
 	
 	private UserDTO user;

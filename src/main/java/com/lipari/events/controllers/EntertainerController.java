@@ -1,6 +1,7 @@
 package com.lipari.events.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,9 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lipari.events.entities.EntertainerEntity;
 import com.lipari.events.models.EntertainerDTO;
-
 import com.lipari.events.models.EventStatsDashboardDTO;
-
+import com.lipari.events.models.constraints.EntertainerConstraintsDTO;
 import com.lipari.events.payload.MessageResponse;
 import com.lipari.events.repositories.UserRepository;
 
@@ -133,7 +133,7 @@ public class EntertainerController {
 				EntertainerEntity entertainer = stripeRequestsStorageService.getEntertainer(account.getId());
 				
 				entertainer.setStripeConnectedAccount(account.getId());
-				entertainerService.updateEntertainer(entertainer);
+				entertainerService.update(entertainer);
 			}
 			
 			break;
@@ -144,5 +144,34 @@ public class EntertainerController {
 		return ResponseEntity.ok().build();
 	}
 	
+	
+	@GetMapping("/all")
+	public List<EntertainerDTO> getAll(EntertainerDTO category) {
+		return entertainerService.getAll();
+	}
+	
+	// CREATE 
+	@GetMapping("/create")
+	public EntertainerDTO create(@RequestBody EntertainerConstraintsDTO events) {
+		return entertainerService.createEntertainer(events);
+	}
+	
+	// READ
+	@GetMapping("/get/{id}")
+	public Optional<EntertainerDTO> getById(@PathVariable long id) {
+		return entertainerService.getById(id);
+	}
+	
+	// UPDATE 
+	@GetMapping("/update")
+	public EntertainerDTO update(@RequestBody EntertainerEntity events) {
+		return entertainerService.update(events);
+	}
+	
+	// DELETE
+	@GetMapping("/delete/{id}")
+	public boolean delete(@PathVariable long id) {
+		return entertainerService.delete(id);
+	}
 	
 }

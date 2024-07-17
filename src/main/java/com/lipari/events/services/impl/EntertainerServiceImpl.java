@@ -1,6 +1,7 @@
 package com.lipari.events.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,18 +34,6 @@ public class EntertainerServiceImpl implements EntertainerService {
 	public EntertainerDTO createEntertainer(EntertainerConstraintsDTO entertainer) {
 		EntertainerEntity ee = entertainerMapper.costraintsDtoToEntity(entertainer);
 		return entertainerMapper.entityToDto(entertainerRepository.save(ee));
-	}
-
-	@Override
-	public List<EntertainerDTO> getAllEntertainers() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EntertainerDTO getEntertainerById() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -109,10 +98,46 @@ public class EntertainerServiceImpl implements EntertainerService {
 
 		return client.accountLinks().create(params);
 	}
+	
+	
+	@Override
+	public List<EntertainerDTO> getAll() {
+		return entertainerRepository.findAll().stream()
+				.map(entertainerMapper::entityToDto).toList();
+	}
+
+
 
 	@Override
-	public EntertainerDTO updateEntertainer(EntertainerEntity entertainer) {
-		return entertainerMapper.entityToDto(entertainerRepository.save(entertainer));
+	public Optional<EntertainerDTO> getById(long id) {
+		return entertainerRepository.findById(id).map(entertainerMapper::entityToDto);
+		
+	}
+
+	@Override
+	public EntertainerDTO update(EntertainerEntity entity) {
+		if(entertainerRepository.existsById(entity.getId()))
+		{
+			EntertainerEntity addsevent = entertainerRepository.save(entity);
+			return entertainerMapper.entityToDto(addsevent);
+		}
+		else {
+			return null;
+		}
+		
+	}
+
+	@Override
+	public boolean delete(long id) {
+		if(entertainerRepository.existsById(id))
+		{
+			entertainerRepository.deleteById(id);
+			return true;
+		}
+		else {
+			return false;
+		}
+		
 	}
 
 }
