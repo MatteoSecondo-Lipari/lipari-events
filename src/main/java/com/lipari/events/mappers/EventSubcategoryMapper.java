@@ -1,6 +1,7 @@
 package com.lipari.events.mappers;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import com.lipari.events.entities.EventSubcategoryEntity;
 import com.lipari.events.models.EventSubcategoryDTO;
@@ -18,8 +19,10 @@ public interface EventSubcategoryMapper {
 	
 	public EventSubcategoryEntity constraintsDtoToEntity(EventSubcategoryConstraintsDTO dto);
 	
+	@Mapping(source = "categoryId", target = "category.id")
 	public EventSubcategoryDTOwithCategoryidDTO entityToDtowithCategoryidDTO(EventSubcategoryEntity entity);
 	
+	@Mapping(source = "category.id", target = "categoryId")
 	public EventSubcategoryEntity DtotoEntitywithCategoryidDTO(EventSubcategoryDTOwithCategoryidDTO dto);
 	
 	

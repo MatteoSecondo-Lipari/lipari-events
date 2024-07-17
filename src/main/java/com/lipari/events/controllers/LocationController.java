@@ -36,13 +36,13 @@ public class LocationController{
 	
 	
 	@GetMapping("/create-update")
-	public LocationWithEventsDTO create(@RequestBody	LocationEntity events) {
+	public LocationDTO create(@RequestBody	LocationEntity events) {
 		return locationService.createOrUpdate(events);
 	}
 	
 	// READ
 	@GetMapping("/get/{id}")
-	public LocationWithEventsDTO getById(@PathVariable int id) {
+	public LocationDTO getById(@PathVariable int id) {
 		return locationService.getById(id);
 	}
 	

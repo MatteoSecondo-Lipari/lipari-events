@@ -10,6 +10,7 @@ import com.lipari.events.entities.EventCategoryEntity;
 import com.lipari.events.entities.LocationEntity;
 import com.lipari.events.mappers.LocationMapper;
 import com.lipari.events.models.EventDTO;
+import com.lipari.events.models.LocationDTO;
 import com.lipari.events.models.LocationSeatsDTO;
 import com.lipari.events.models.LocationWithEventsDTO;
 import com.lipari.events.models.SeatDTO;
@@ -80,16 +81,16 @@ public class LocationServiceImpl implements LocationService{
 	}
 
 	@Override
-	public LocationWithEventsDTO createOrUpdate(LocationEntity location) {
+	public LocationDTO createOrUpdate(LocationEntity location) {
 		LocationEntity addlocations = locationRepository.save(location);
-		return locationMapper.entityToLocationWithEventsDTO(addlocations);
+		return locationMapper.entityToDto(addlocations);
 	}
 
 	@Override
-	public LocationWithEventsDTO getById(int id) {
+	public LocationDTO getById(int id) {
 	    LocationEntity searchLocation = locationRepository.findById(id);
 	    if (searchLocation != null) {
-	        return locationMapper.entityToLocationWithEventsDTO(searchLocation);
+	        return locationMapper.entityToDto(searchLocation);
 	    } else {
 	        return null;
 	    }

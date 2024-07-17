@@ -11,9 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EventSubcategoryDTOwithCategoryidDTO {
 
-	private int id;
-	
-	private String name;
-	
-	private List<EventWithoutSubcategoryDTO> events;
+    private int id;
+    private String name;
+    private List<EventWithoutSubcategoryDTO> events;
+    private int categoryId;  // Aggiungi questo campo
 }
