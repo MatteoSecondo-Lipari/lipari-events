@@ -124,7 +124,7 @@ public class EventController {
 		
 		//associate entertainers to this new event
 		event.getEntertainers().forEach(e ->
-			eventsEntertainersService.create(
+			eventsEntertainersService.createOrUpdate(
 					new EventsEntertainersConstraintsDTO(newEvent, e, 100 / event.getEntertainers().size()))
 		);
 		

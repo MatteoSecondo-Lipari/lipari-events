@@ -1,5 +1,7 @@
 package com.lipari.events.services.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +22,32 @@ public class EventsEntertainersServiceImpl implements EventsEntertainersService 
 	EventsEntertainersMapper eventsEntertainersMapper;
 
 	@Override
-	public EventsEntertainersDTO create(EventsEntertainersConstraintsDTO eventsEntertainers) {
+	public EventsEntertainersDTO createOrUpdate(EventsEntertainersConstraintsDTO eventsEntertainers) {
 		EventsEntertainersEntity ee = eventsEntertainersMapper.constraintsDtoToEntity(eventsEntertainers);
 		return eventsEntertainersMapper.entityToDto(eventsEntertainersRepository.save(ee));
+	}
+
+	@Override
+	public List<EventsEntertainersDTO> getAll() {
+		return eventsEntertainersRepository.findAll()
+				.stream().map(eventsEntertainersMapper::entityToDto).toList();
+	}
+
+	@Override
+	public EventsEntertainersDTO getById(long id) {
+		return eventsEntertainersMapper.entityToDto(
+				eventsEntertainersRepository.findById(id).orElse(null));
+	}
+
+	@Override
+	public boolean delete(long id) {
+		
+		if(!eventsEntertainersRepository.existsById(id)) {
+			return false;
+		}
+		
+		eventsEntertainersRepository.deleteById(id);
+		return true;
 	}
 
 }

@@ -13,4 +13,6 @@ public interface CustomerService {
 	public CustomerDTO getCustomerById(long id);
 	
 	public CustomerDTO getCustomerByEmail(String email);
+	
+	public boolean deleteCustomer(long id);
 }

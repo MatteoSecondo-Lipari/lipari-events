@@ -123,7 +123,7 @@ public class AuthController {
 			
 			userRepository.save(user);
 			signupRequest.getCustomer().setUser(new UserDTO(user.getId()));
-			customerService.createCustomer(signupRequest.getCustomer());
+			customerService.createOrUpdateCustomer(signupRequest.getCustomer());
 		} else if(roles.size() == 1 && roles.contains(new RoleDTO(ERole.ROLE_ENTERTAINER))) {
 			if(signupRequest.getEntertainer() == null) {
 				return ResponseEntity.badRequest()
