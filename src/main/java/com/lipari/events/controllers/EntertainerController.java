@@ -150,8 +150,8 @@ public class EntertainerController {
 		return entertainerService.getAll();
 	}
 	
-	// CREATE 
-	@GetMapping("/create")
+	//TODO CREATE si deve creare l'utente con la password cifrata
+	@GetMapping("/create") 
 	public EntertainerDTO create(@RequestBody EntertainerConstraintsDTO events) {
 		return entertainerService.createEntertainer(events);
 	}
@@ -162,7 +162,7 @@ public class EntertainerController {
 		return entertainerService.getById(id);
 	}
 	
-	// UPDATE 
+	// UPDATE
 	@GetMapping("/update")
 	public EntertainerDTO update(@RequestBody EntertainerEntity events) {
 		return entertainerService.update(events);

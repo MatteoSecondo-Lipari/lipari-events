@@ -1,15 +1,17 @@
 package com.lipari.events.services;
 
 import java.util.List;
+import java.util.Optional;
 
-import com.lipari.events.models.EventCategoryDTO;
-import com.lipari.events.models.EventSubcategoryDTO;
+
+import com.lipari.events.models.EventSubcategoryDTOwithCategoryidDTO;
 
 public interface EventSubcategoryService {
 
-	public EventSubcategoryDTO createOrUpdate(EventCategoryDTO subcategory);
+	public EventSubcategoryDTOwithCategoryidDTO createOrUpdate(EventSubcategoryDTOwithCategoryidDTO subcategory);
 	
-	public List<EventSubcategoryDTO> getAll();
-	public EventSubcategoryDTO getById(int id);
+	public List<EventSubcategoryDTOwithCategoryidDTO> getAll();
+	public Optional<EventSubcategoryDTOwithCategoryidDTO> getById(int id);
+	public boolean delete(int id);
 
 }
