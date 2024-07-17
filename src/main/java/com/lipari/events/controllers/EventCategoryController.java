@@ -1,6 +1,7 @@
 package com.lipari.events.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,13 +26,15 @@ public class EventCategoryController {
 		return categoryService.getAll();
 	}
 	
+	// CREATE 
 	@GetMapping("/create")
 	public EventCategoryDTO create(@RequestBody	EventCategoryEntity events) {
 		return categoryService.create(events);
 	}
+	
 	// READ
 	@GetMapping("/get/{id}")
-	public EventCategoryDTO getById(@PathVariable int id) {
+	public Optional<EventCategoryDTO> getById(@PathVariable int id) {
 		return categoryService.getById(id);
 	}
 	
@@ -41,7 +44,7 @@ public class EventCategoryController {
 		return categoryService.update(events);
 	}
 	
-	// Delete
+	// DELETE
 	@GetMapping("/delete/{id}")
 	public boolean delete(@PathVariable int id) {
 		return categoryService.delete(id);

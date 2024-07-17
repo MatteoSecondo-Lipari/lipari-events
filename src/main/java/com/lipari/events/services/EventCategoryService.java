@@ -1,6 +1,7 @@
 package com.lipari.events.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.lipari.events.entities.EventCategoryEntity;
 import com.lipari.events.models.EventCategoryDTO;
@@ -16,7 +17,7 @@ public interface EventCategoryService {
 	public EventCategoryDTO create(EventCategoryEntity events);
 	// READ
 	
-	public EventCategoryDTO getById(int id);
+	public Optional<EventCategoryDTO> getById(int id);
 	
 	// UPDATE 
 	

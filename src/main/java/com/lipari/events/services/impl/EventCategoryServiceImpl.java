@@ -1,6 +1,7 @@
 package com.lipari.events.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,6 @@ import com.lipari.events.entities.EventCategoryEntity;
 import com.lipari.events.mappers.EventCategoryMapper;
 import com.lipari.events.models.EventCategoryDTO;
 import com.lipari.events.repositories.EventCategoryRepository;
-import com.lipari.events.repositories.EventRepository;
 import com.lipari.events.services.EventCategoryService;
 
 @Service
@@ -35,8 +35,9 @@ public class EventCategoryServiceImpl implements EventCategoryService {
 	}
 
 	@Override
-	public EventCategoryDTO getById(int id) {
-		return categoryRepository.findById(id);
+	public Optional<EventCategoryDTO> getById(int id) {
+		return categoryRepository.findById(id).map(categoryMapper::entityToDto);
+		
 	}
 
 	@Override
