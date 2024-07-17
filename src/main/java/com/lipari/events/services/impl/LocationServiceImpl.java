@@ -1,11 +1,13 @@
 package com.lipari.events.services.impl;
 
 import java.util.List;
-
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lipari.events.entities.EventCategoryEntity;
+import com.lipari.events.entities.LocationEntity;
 import com.lipari.events.mappers.LocationMapper;
 import com.lipari.events.models.EventDTO;
 import com.lipari.events.models.LocationSeatsDTO;
@@ -75,6 +77,36 @@ public class LocationServiceImpl implements LocationService{
 	    }
 
 	    return locationSeatsDTOs;
+	}
+
+	@Override
+	public LocationWithEventsDTO createOrUpdate(LocationEntity location) {
+		LocationEntity addlocations = locationRepository.save(location);
+		return locationMapper.entityToLocationWithEventsDTO(addlocations);
+	}
+
+	@Override
+	public LocationWithEventsDTO getById(int id) {
+	    LocationEntity searchLocation = locationRepository.findById(id);
+	    if (searchLocation != null) {
+	        return locationMapper.entityToLocationWithEventsDTO(searchLocation);
+	    } else {
+	        return null;
+	    }
+	}
+
+	@Override
+	public boolean delete(int id) {
+		LocationEntity searchLocation = locationRepository.findById(id);
+		if(searchLocation != null)
+		{
+			locationRepository.deleteById(id);
+			return true;
+		}
+		else {
+			return false;
+		}
+		
 	}
 
 
