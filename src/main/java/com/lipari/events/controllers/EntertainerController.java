@@ -42,65 +42,65 @@ import com.stripe.net.Webhook;
 @RestController
 @RequestMapping("/entertainer")
 public class EntertainerController {
-	
+
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	EntertainerService entertainerService;
-	
+
 	@Autowired
 	StripeRequestsStorageService stripeRequestsStorageService;
-
+	
 	@GetMapping("/stage-name/{name}")
 	public List<EntertainerDTO> getMethodName(@PathVariable String name) {
 		return entertainerService.getEntertainerByStageName(name);
 	}
+
 	
 	@PreAuthorize("hasAnyRole('ROLE_ENTERTAINER')")
-
 	@GetMapping("/dashboard")
-	 public List<EventStatsDashboardDTO> getAllEventStatistics() {
-		
+	public List<EventStatsDashboardDTO> getAllEventStatistics() {
+
 		UserDetailsImpl userDetailsImpl = (UserDetailsImpl)SecurityContextHolder.getContext().
 				getAuthentication().getPrincipal();
-		
-  		 long entertainer_id = userDetailsImpl.getId();
-		
-		 List<EventStatsDashboardDTO> statistics = entertainerService.getEventStatistics(entertainer_id);
-		 return statistics;
-	    }
 
+		long entertainer_id = userDetailsImpl.getId();
+
+		List<EventStatsDashboardDTO> statistics = entertainerService.getEventStatistics(entertainer_id);
+		return statistics;
+	}
+
+	
 	@GetMapping("/onboarding")
 	public ResponseEntity<?> onboarding() {
 
-		
 		UserDetailsImpl userDetailsImpl = (UserDetailsImpl)SecurityContextHolder.getContext().
 				getAuthentication().getPrincipal();
-		
+
 
 		EntertainerEntity entertainer = userRepository.findByEmail(userDetailsImpl.getEmail())
 				.get().getEntertainer();
-		
+
 		if(entertainer.getStripeConnectedAccount() != null) {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
 					new MessageResponse("Current user (entertainer) has already a stripe account connected",
 							HttpStatus.FORBIDDEN.value()));
 		}
-		
+
 		try {
 			Account account = entertainerService.createStripeAccount();
 			AccountLink accountLink = entertainerService.linkToOnboarding(account.getId());
-			
+
 			stripeRequestsStorageService.addEntertainer(account.getId(), entertainer);
-			
+
 			return ResponseEntity.ok(accountLink.toJson());
 		} catch (StripeException e) {
 			return ResponseEntity.internalServerError().body(
 					new MessageResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
 		}
 	}
-	
+
 	@PostMapping("/onboarding-webhook")
 	public ResponseEntity<?> saveTicketsAndDoTrasfers(
 			@RequestHeader("Stripe-Signature") String stripeSignature,
@@ -114,7 +114,7 @@ public class EntertainerController {
 			return ResponseEntity.badRequest().body(
 					new MessageResponse(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
 		}
-		
+
 		EventDataObjectDeserializer dataObjectDeserializer = event.getDataObjectDeserializer();
 		StripeObject stripeObject = null;
 		if (dataObjectDeserializer.getObject().isPresent()) {
@@ -127,15 +127,15 @@ public class EntertainerController {
 		switch (event.getType()) {
 		case "account.updated":
 			Account account = (Account)stripeObject;
-			
+
 			if(account.getCapabilities().getTransfers().equals("active")) {
 				//acount onboarding success, save stripe account here in entertainer table				
 				EntertainerEntity entertainer = stripeRequestsStorageService.getEntertainer(account.getId());
-				
+
 				entertainer.setStripeConnectedAccount(account.getId());
 				entertainerService.updateEntertainer(entertainer);
 			}
-			
+
 			break;
 		default:
 			break;
@@ -143,6 +143,6 @@ public class EntertainerController {
 
 		return ResponseEntity.ok().build();
 	}
-	
-	
+
+
 }
