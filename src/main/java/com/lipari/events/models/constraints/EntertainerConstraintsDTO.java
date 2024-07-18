@@ -20,5 +20,7 @@ public class EntertainerConstraintsDTO {
 	@NotBlank(message = "Must be not null and must contain at least one non-whitespace character")
 	private String type;
 	
+	private String stripe_connected_account;
+	
 	private UserDTO user;
 }

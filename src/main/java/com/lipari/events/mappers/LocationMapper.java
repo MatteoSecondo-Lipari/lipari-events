@@ -1,5 +1,7 @@
 package com.lipari.events.mappers;
 
+import java.util.Optional;
+
 import org.mapstruct.Mapper;
 
 
@@ -27,8 +29,6 @@ public interface LocationMapper {
 	public LocationSeatsDTO entityToLocationSeatsDTODTO(LocationEntity entity);
 	
 	public LocationEntity dtoLocationSeatsDTOToEntity(LocationSeatsDTO dto);
-	
-	
 	
 	
 }

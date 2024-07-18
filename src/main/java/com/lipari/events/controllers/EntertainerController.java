@@ -1,6 +1,8 @@
 package com.lipari.events.controllers;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,9 +12,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,9 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lipari.events.entities.EntertainerEntity;
 import com.lipari.events.mappers.EntertainerMapper;
 import com.lipari.events.models.EntertainerDTO;
-
 import com.lipari.events.models.EventStatsDashboardDTO;
-
+import com.lipari.events.models.constraints.EntertainerConstraintsDTO;
 import com.lipari.events.payload.MessageResponse;
 import com.lipari.events.repositories.UserRepository;
 
@@ -69,13 +72,14 @@ public class EntertainerController {
 		UserDetailsImpl userDetailsImpl = (UserDetailsImpl)SecurityContextHolder.getContext().
 				getAuthentication().getPrincipal();
 
-		long entertainer_id = userDetailsImpl.getId();
-
+  	String email = userDetailsImpl.getEmail();
+  	long entertainer_id= userRepository.findByEmail(email).get().getEntertainer().getId();
+		
 		List<EventStatsDashboardDTO> statistics = entertainerService.getEventStatistics(entertainer_id);
 		return statistics;
 	}
 
-	//connecting bank account to entertainer account
+	@PreAuthorize("hasAnyRole('ROLE_ENTERTAINER')")
 	@GetMapping("/onboarding")
 	public ResponseEntity<?> onboarding() {
 
@@ -141,7 +145,7 @@ public class EntertainerController {
 				EntertainerDTO entertainer = temporaryEntertainerService.getByStripeConnectedAccount(account.getId());
 				EntertainerEntity ee =  entertainerMapper.dtoToEntity(entertainer);
 				ee.setId(entertainer.getEntertainerId());
-				entertainerService.updateEntertainer(ee);
+				entertainerService.update(ee);
 				temporaryEntertainerService.removeByStripeConnectedAccount(account.getId());
 			}
 
@@ -153,5 +157,31 @@ public class EntertainerController {
 		return ResponseEntity.ok().build();
 	}
 
-
+	@GetMapping("/all")
+	public List<EntertainerDTO> getAll(EntertainerDTO category) {
+		return entertainerService.getAll();
+	}
+	
+	// READ
+	@GetMapping("/get/{id}")
+	public ResponseEntity<?> getById(@PathVariable long id) {
+		try {
+			return ResponseEntity.ok(entertainerService.getById(id));
+		} catch (NoSuchElementException e) {
+			return ResponseEntity.status(404).body(new MessageResponse("No entertainer found", 404));
+		}
+	}
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+	@PutMapping("/update")
+	public EntertainerDTO update(@RequestBody EntertainerEntity events) {
+		return entertainerService.update(events);
+	}
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+	@DeleteMapping("/delete/{id}")
+	public boolean delete(@PathVariable long id) {
+		return entertainerService.delete(id);
+	}
+	
 }
