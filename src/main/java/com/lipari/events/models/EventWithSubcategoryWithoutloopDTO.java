@@ -2,6 +2,7 @@ package com.lipari.events.models;
 
 import java.time.LocalDate;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,9 +18,15 @@ public class EventWithSubcategoryWithoutloopDTO {
 	
 	private LocalDate date;
 	
+	private float ticketPrice;
+
+	private float numberedTicketPrice;
+	
 	private String imagePath;
 	
 	private LocationDTO location;
 	
 	private EventsSubcategoryWithoutEventsDTO subcategory;
+	
+
 }

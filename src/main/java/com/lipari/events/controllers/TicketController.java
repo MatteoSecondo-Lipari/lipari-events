@@ -205,6 +205,7 @@ public class TicketController {
 	}
 	
 	//get all tickets purchased by a customer
+	@PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
 	@GetMapping("/orders")
 	public List<TicketOrdersDTO> Orders() {
 		UserDetailsImpl userDetailsImpl = (UserDetailsImpl)SecurityContextHolder.getContext().

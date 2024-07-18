@@ -2,6 +2,7 @@ package com.lipari.events.models.constraints;
 
 import com.lipari.events.models.EntertainerDTO;
 import com.lipari.events.models.EventDTO;
+import com.lipari.events.models.EventWithSubcategoryWithoutloopDTO;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ public class EventsEntertainersConstraintsDTO {
 	private long id;
 	
 	@NotNull(message = "Must not be null")
-	private EventDTO event;
+	private EventWithSubcategoryWithoutloopDTO event;
 	
 	@NotNull(message = "Must not be null")
 	private EntertainerDTO entertainer;
@@ -24,7 +25,7 @@ public class EventsEntertainersConstraintsDTO {
 	@NotNull(message = "Must not be null")
 	private float percentage;
 
-	public EventsEntertainersConstraintsDTO(@NotNull(message = "Must not be null") EventDTO event,
+	public EventsEntertainersConstraintsDTO(@NotNull(message = "Must not be null") EventWithSubcategoryWithoutloopDTO event,
 			@NotNull(message = "Must not be null") EntertainerDTO entertainer,
 			@NotNull(message = "Must not be null") float percentage) {
 		super();

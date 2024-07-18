@@ -10,7 +10,7 @@ import com.lipari.events.models.constraints.EventConstraintsDTO;
 
 public interface EventService {
 
-	public EventDTO createOrUpdateEvent(EventConstraintsDTO event, String imagePath);
+	public EventWithSubcategoryWithoutloopDTO createOrUpdateEvent(EventConstraintsDTO event, String imagePath);
 	
 	public List<EventWithSubcategoryWithoutloopDTO> getAllEvents();
 	public EventDTO getEventDTOById(long id);

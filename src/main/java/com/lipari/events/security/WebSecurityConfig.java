@@ -78,6 +78,10 @@ public class WebSecurityConfig {
 					.requestMatchers("/ticket/all/{event}").permitAll()
 					.requestMatchers("/event/all").permitAll()
 					.requestMatchers("/event/{id}").permitAll()
+					.requestMatchers("/event/category/subcategory/all").permitAll()
+					.requestMatchers("/event/category/subcategory/get/{id}").permitAll()
+					.requestMatchers("/event/category/get/{id}").permitAll()
+					.requestMatchers("/location/get/{id}").permitAll()
 					.anyRequest().authenticated()
 			);
 		
