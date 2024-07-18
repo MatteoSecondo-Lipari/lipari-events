@@ -13,7 +13,5 @@ public class SeatDTO {
 
 	private int id;
 	
-	@Getter
-	@Setter
 	private String number;
 }

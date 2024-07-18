@@ -11,6 +11,7 @@ import com.lipari.events.mappers.EventMapper;
 import com.lipari.events.models.EntertainerDTO;
 
 import com.lipari.events.models.EventDTO;
+
 import com.lipari.events.models.EventWithSubcategoryWithoutloopDTO;
 import com.lipari.events.models.constraints.EventConstraintsDTO;
 import com.lipari.events.repositories.EntertainerRepository;
@@ -37,20 +38,20 @@ public class EventServiceImpl implements EventService {
 	EntertainerMapper entertainerMapper;
 
 	@Override
-	public EventDTO createEvent(EventConstraintsDTO event, String imagePath) {
+	public EventWithSubcategoryWithoutloopDTO createOrUpdateEvent(EventConstraintsDTO event, String imagePath) {
 		EventEntity ee = eventMapper.constraintsDtoToEntity(event);
 
 		if(imagePath != null) {
 			ee.setImagePath(imagePath);
 		}
 
-		return eventMapper.entityToDto(eventRepository.save(ee));
+		return eventMapper.entityToEventWithSubcategoryWithoutLoopToDto(eventRepository.save(ee));
 	}
 
 	@Override
-	public List<EventDTO> getAllEvents() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<EventWithSubcategoryWithoutloopDTO> getAllEvents() {
+		return eventRepository.findAll()
+				.stream().map(eventMapper::entityToEventWithSubcategoryWithoutLoopToDto).toList();
 	}
 
 	@Override
@@ -59,15 +60,21 @@ public class EventServiceImpl implements EventService {
 	}
 	
 	@Override
-	public List<EventWithSubcategoryWithoutloopDTO> getEventWithName(String name) {
-		return eventRepository.findEventByNameStartingWith(name).stream()
-				.map(eventMapper::EntitySearchWithoutLooptoDto).toList();
+	public EventWithSubcategoryWithoutloopDTO getEventWithSubcategoryWithoutloopDTOById(long id) {
+		return eventMapper.entityToEventWithSubcategoryWithoutLoopToDto(eventRepository.findById(id).orElse(null));
 	}
 	
 	@Override
+	public List<EventWithSubcategoryWithoutloopDTO> getEventWithName(String name) {
+		return eventRepository.findEventByNameStartingWith(name).stream()
+				.map(eventMapper::entityToEventWithSubcategoryWithoutLoopToDto).toList();
+	}
+	
+
+	@Override
 	public List<EventWithSubcategoryWithoutloopDTO> getTop20newestEvents(){
 		return eventRepository.findTop20ByDateOrderDesc().stream()
-				.map(eventMapper::EntitySearchWithoutLooptoDto).toList();
+				.map(eventMapper::entityToEventWithSubcategoryWithoutLoopToDto).toList();
 	}
 
 	@Override
@@ -86,4 +93,18 @@ public class EventServiceImpl implements EventService {
 		
 		return true;
 	}
+
+	@Override
+	public boolean deleteEvent(long id) {
+		
+		if(!eventRepository.existsById(id)) {
+			return false;
+		}
+		
+		eventRepository.deleteById(id);
+		return true;
+	}
+
 }
+
+

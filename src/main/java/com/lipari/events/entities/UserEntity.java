@@ -35,17 +35,17 @@ public class UserEntity {
 	@NotBlank(message = "Must be not null and must contain at least one non-whitespace character")
 	@Size(max = 120, message = "Must be at most 120 characters")
 	private String password;
-
+	
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+	private CustomerEntity customer;
+	
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+	private EntertainerEntity entertainer;
+	
 	public UserEntity(@Email @NotBlank @Size(max = 50) String email, @NotBlank @Size(max = 120) String password) {
 		super();
 		this.email = email;
 		this.password = password;
 	}
-	
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
-	private CustomerEntity customer;
-	
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
-	private EntertainerEntity entertainer;
 	
 }

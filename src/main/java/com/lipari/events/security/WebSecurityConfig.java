@@ -66,7 +66,7 @@ public class WebSecurityConfig {
 			.exceptionHandling(exception -> exception.accessDeniedHandler(accessDeniedHandler))
 			.authorizeHttpRequests(auth ->
 				auth.requestMatchers("/auth/**").permitAll()
-					.requestMatchers("/event/*/image").permitAll()
+					.requestMatchers("/event/{id}/image").permitAll()
 					.requestMatchers("/entertainer/stage-name/**").permitAll()
 					.requestMatchers("/event/category/all-events").permitAll()
 					.requestMatchers("/location/all").permitAll()
@@ -76,6 +76,12 @@ public class WebSecurityConfig {
 					.requestMatchers("/event/newest").permitAll()
 					.requestMatchers("/location/seats/{event}").permitAll()
 					.requestMatchers("/ticket/all/{event}").permitAll()
+					.requestMatchers("/event/all").permitAll()
+					.requestMatchers("/event/{id}").permitAll()
+					.requestMatchers("/event/category/subcategory/all").permitAll()
+					.requestMatchers("/event/category/subcategory/get/{id}").permitAll()
+					.requestMatchers("/event/category/get/{id}").permitAll()
+					.requestMatchers("/location/get/{id}").permitAll()
 					.anyRequest().authenticated()
 			);
 		
