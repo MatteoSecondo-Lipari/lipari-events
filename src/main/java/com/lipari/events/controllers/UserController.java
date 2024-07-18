@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,7 @@ public class UserController {
 		return ResponseEntity.ok(userService.findUserByEmail(email));
 	}
 	
-	@PutMapping("/update")
+	@PatchMapping("/update")
     public ResponseEntity<?> updateInfo(@RequestBody FullUserDTO usersChange) {
         
         UserDetailsImpl userDetailsImpl = (UserDetailsImpl)SecurityContextHolder.getContext().
@@ -43,17 +44,17 @@ public class UserController {
         
         if (user.getCustomer() == null && user.getEntertainer() == null) {
             // Admin logic
-            return ResponseEntity.ok(userService.adminChanges(usersChange));
+            return ResponseEntity.ok(userService.adminChanges(user, usersChange));
         }
         
         if (user.getCustomer() == null && user.getEntertainer() != null) {
             // Entertainer logic
-            return ResponseEntity.ok(userService.entertainerChanges(usersChange));
+            return ResponseEntity.ok(userService.entertainerChanges(user, usersChange));
         }
         
         if (user.getCustomer() != null && user.getEntertainer() == null) {
             // Customer logic
-            return ResponseEntity.ok(userService.customerChanges(usersChange));
+            return ResponseEntity.ok(userService.customerChanges(user, usersChange));
         }
         
         return ResponseEntity.badRequest().body("Invalid user role");

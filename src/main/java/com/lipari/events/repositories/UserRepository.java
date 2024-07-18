@@ -14,6 +14,4 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	public Optional<UserEntity> findByEmail(String email);
 	
 	public boolean existsByEmail(String email);
-
-	public FullUserDTO saveAll(FullUserDTO changes);
 }

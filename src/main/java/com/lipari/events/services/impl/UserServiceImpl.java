@@ -3,9 +3,11 @@ package com.lipari.events.services.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lipari.events.entities.CustomerEntity;
 import com.lipari.events.entities.UserEntity;
 import com.lipari.events.mappers.UserMapper;
 import com.lipari.events.models.FullUserDTO;
+import com.lipari.events.models.UserDTO;
 import com.lipari.events.repositories.UserRepository;
 import com.lipari.events.services.UserService;
 
@@ -25,41 +27,38 @@ public class UserServiceImpl implements UserService {
 	}
 
     @Override
-    public FullUserDTO adminChanges(FullUserDTO changes) {
-        UserEntity user = userRepository.findByEmail(changes.getEmail()).orElse(null);
-        if (user != null) {
-            user.setEmail(changes.getEmail());
-            userRepository.save(user);
-        }
-        return userMapper.entityToFullDto(user);
+    public FullUserDTO adminChanges(FullUserDTO user, FullUserDTO changes) {
+    	UserEntity u = userMapper.fullDtoToEntity(user);
+       
+        u.setEmail(changes.getEmail());
+            
+        return userMapper.entityToFullDto(userRepository.save(u));
     }
 
     @Override
-    public FullUserDTO entertainerChanges(FullUserDTO changes) {
-        UserEntity user = userRepository.findByEmail(changes.getEmail()).orElse(null);
-        if (user != null && user.getEntertainer() != null) {
-        	user.setEmail(changes.getEmail());
-            user.getEntertainer().setStageName(null);
-            user.getEntertainer().setType(changes.getEntertainer().getType());;
-            userRepository.save(user);
-        }
-        return userMapper.entityToFullDto(user);
+    public FullUserDTO entertainerChanges(FullUserDTO user, FullUserDTO changes) {
+        UserEntity u = userMapper.fullDtoToEntity(user);
+       
+        u.setEmail(changes.getEmail());
+        u.getEntertainer().setStageName(null);
+        u.getEntertainer().setType(changes.getEntertainer().getType());
+        
+        return userMapper.entityToFullDto(userRepository.save(u));
     }
 
-    public FullUserDTO customerChanges(FullUserDTO changes) {
-        UserEntity user = userRepository.findByEmail(changes.getEmail()).orElse(null);
-        if (user != null && user.getCustomer() != null) {
-            user.setEmail(changes.getEmail());
-            user.getCustomer().setName(changes.getCustomer().getName());
-            user.getCustomer().setSurname(changes.getCustomer().getSurname());
-            user.getCustomer().setTaxIdCode(changes.getCustomer().getTaxIdCode());
-            user.getCustomer().setCity(changes.getCustomer().getCity());
-            user.getCustomer().setPhone(changes.getCustomer().getPhone());
-            user.getCustomer().setGender(changes.getCustomer().getGender());
-            user.getCustomer().setBirthDate(changes.getCustomer().getBirthDate());
-            userRepository.save(user);
-        }
-        return userMapper.entityToFullDto(user);
+    public FullUserDTO customerChanges(FullUserDTO user, FullUserDTO changes) {
+    	UserEntity u = userMapper.fullDtoToEntity(user);
+        
+    	u.setEmail(changes.getEmail());
+    	u.getCustomer().setName(changes.getCustomer().getName());
+    	u.getCustomer().setSurname(changes.getCustomer().getSurname());
+    	u.getCustomer().setTaxIdCode(changes.getCustomer().getTaxIdCode());
+    	u.getCustomer().setCity(changes.getCustomer().getCity());
+    	u.getCustomer().setPhone(changes.getCustomer().getPhone());
+        u.getCustomer().setGender(changes.getCustomer().getGender());
+        u.getCustomer().setBirthDate(changes.getCustomer().getBirthDate());
+      
+        return userMapper.entityToFullDto(userRepository.save(u));
     }
 
 }
