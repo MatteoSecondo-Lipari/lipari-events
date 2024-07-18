@@ -17,5 +17,4 @@ public interface CustomerMapper {
 	
 	public CustomerEntity constraintsDtoToEntity(CustomerConstraintsDTO dto);
 	
-	
 }

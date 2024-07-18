@@ -9,56 +9,53 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lipari.events.models.CustomerDTO;
-import com.lipari.events.models.constraints.CustomerConstraintsDTO;
+import com.lipari.events.models.EventsEntertainersDTO;
+import com.lipari.events.models.constraints.EventsEntertainersConstraintsDTO;
 import com.lipari.events.payload.MessageResponse;
-import com.lipari.events.services.CustomerService;
+import com.lipari.events.services.EventsEntertainersService;
 
-import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/customer")
-public class CustomerController {
+@RequestMapping("/events-entertainers")
+public class EventsEntertainersController {
 	
 	@Autowired
-	CustomerService customerService;
+	EventsEntertainersService eventsEntertainersService;
 	
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-	@PutMapping("/update")
-	public CustomerDTO updateCustomer(@RequestBody @Valid CustomerConstraintsDTO customer) {
-		CustomerDTO c = customerService.getCustomerById(customer.getId());
-		customer.setUser(c.getUser());
-		
-		return customerService.createOrUpdateCustomer(customer);
+	@PostMapping("/create")
+	public EventsEntertainersDTO createOrUpdate(@RequestBody EventsEntertainersConstraintsDTO ee) {
+		return eventsEntertainersService.createOrUpdate(ee);
 	}
-	
+
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@GetMapping("/all")
-	public List<CustomerDTO> getAll() {
-		return customerService.getAllCustomers();
+	public List<EventsEntertainersDTO> getAll() {
+		return eventsEntertainersService.getAll();
 	}
 	
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@GetMapping("/{id}")
-	public CustomerDTO getById(@PathVariable long id) {
-		return customerService.getCustomerById(id);
+	public EventsEntertainersDTO getById(@PathVariable long id) {
+		return eventsEntertainersService.getById(id);
 	}
 	
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> deleteCustomer(@PathVariable long id){
+	public ResponseEntity<?> deleteById(@PathVariable long id) {
 		
-		if(!customerService.deleteCustomer(id)) {
+		if(!eventsEntertainersService.delete(id)) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-					new MessageResponse("Customer not existing", 404));
+					new MessageResponse("Entry not existing", 404));
 		}
 		
 		return ResponseEntity.ok().body(
-				new MessageResponse("Customer deleted successfully", 200));
+				new MessageResponse("Entry deleted successfully", 200));
 	}
+	
 }

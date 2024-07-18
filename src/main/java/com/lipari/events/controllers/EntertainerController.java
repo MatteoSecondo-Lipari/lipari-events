@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lipari.events.entities.EntertainerEntity;
+import com.lipari.events.mappers.EntertainerMapper;
 import com.lipari.events.models.EntertainerDTO;
 import com.lipari.events.models.EventStatsDashboardDTO;
 import com.lipari.events.models.constraints.EntertainerConstraintsDTO;
@@ -31,7 +32,7 @@ import com.lipari.events.repositories.UserRepository;
 
 import com.lipari.events.security.user_details.UserDetailsImpl;
 import com.lipari.events.services.EntertainerService;
-import com.lipari.events.services.StripeRequestsStorageService;
+import com.lipari.events.services.TemporaryEntertainerService;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Account;
@@ -45,66 +46,73 @@ import com.stripe.net.Webhook;
 @RestController
 @RequestMapping("/entertainer")
 public class EntertainerController {
-	
+
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	EntertainerService entertainerService;
 	
 	@Autowired
-	StripeRequestsStorageService stripeRequestsStorageService;
+	TemporaryEntertainerService temporaryEntertainerService;
+	
+	@Autowired
+	EntertainerMapper entertainerMapper;
 
 	@GetMapping("/stage-name/{name}")
 	public List<EntertainerDTO> getMethodName(@PathVariable String name) {
 		return entertainerService.getEntertainerByStageName(name);
 	}
+
 	
 	@PreAuthorize("hasAnyRole('ROLE_ENTERTAINER')")
 	@GetMapping("/dashboard")
-	 public List<EventStatsDashboardDTO> getAllEventStatistics() {
-		
+	public List<EventStatsDashboardDTO> getAllEventStatistics() {
+
 		UserDetailsImpl userDetailsImpl = (UserDetailsImpl)SecurityContextHolder.getContext().
 				getAuthentication().getPrincipal();
+
+  	String email = userDetailsImpl.getEmail();
+  	long entertainer_id= userRepository.findByEmail(email).get().getEntertainer().getId();
 		
-  		 String email = userDetailsImpl.getEmail();
-  		 long entertainer_id= userRepository.findByEmail(email).get().getEntertainer().getId();
-		
-		 List<EventStatsDashboardDTO> statistics = entertainerService.getEventStatistics(entertainer_id);
-		 return statistics;
-	    }
+		List<EventStatsDashboardDTO> statistics = entertainerService.getEventStatistics(entertainer_id);
+		return statistics;
+	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ENTERTAINER')")
 	@GetMapping("/onboarding")
 	public ResponseEntity<?> onboarding() {
 
-		
 		UserDetailsImpl userDetailsImpl = (UserDetailsImpl)SecurityContextHolder.getContext().
 				getAuthentication().getPrincipal();
-		
+
 
 		EntertainerEntity entertainer = userRepository.findByEmail(userDetailsImpl.getEmail())
 				.get().getEntertainer();
-		
+
 		if(entertainer.getStripeConnectedAccount() != null) {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
 					new MessageResponse("Current user (entertainer) has already a stripe account connected",
 							HttpStatus.FORBIDDEN.value()));
 		}
-		
+
 		try {
 			Account account = entertainerService.createStripeAccount();
 			AccountLink accountLink = entertainerService.linkToOnboarding(account.getId());
-			
-			stripeRequestsStorageService.addEntertainer(account.getId(), entertainer);
-			
+
+			EntertainerDTO e = entertainerMapper.entityToDto(entertainer);
+			e.setStripeConnectedAccount(account.getId());
+			e.setEntertainerId(entertainer.getId());
+			temporaryEntertainerService.save(e);
+
 			return ResponseEntity.ok(accountLink.toJson());
 		} catch (StripeException e) {
 			return ResponseEntity.internalServerError().body(
 					new MessageResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
 		}
 	}
-	
+
+	//saving stripe account into entertainer account
 	@PostMapping("/onboarding-webhook")
 	public ResponseEntity<?> saveTicketsAndDoTrasfers(
 			@RequestHeader("Stripe-Signature") String stripeSignature,
@@ -118,7 +126,7 @@ public class EntertainerController {
 			return ResponseEntity.badRequest().body(
 					new MessageResponse(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
 		}
-		
+
 		EventDataObjectDeserializer dataObjectDeserializer = event.getDataObjectDeserializer();
 		StripeObject stripeObject = null;
 		if (dataObjectDeserializer.getObject().isPresent()) {
@@ -131,15 +139,16 @@ public class EntertainerController {
 		switch (event.getType()) {
 		case "account.updated":
 			Account account = (Account)stripeObject;
-			
-			if(account.getCapabilities().getTransfers().equals("active")) {
+
+			if(account.getDetailsSubmitted() == true) {
 				//acount onboarding success, save stripe account here in entertainer table				
-				EntertainerEntity entertainer = stripeRequestsStorageService.getEntertainer(account.getId());
-				
-				entertainer.setStripeConnectedAccount(account.getId());
-				entertainerService.update(entertainer);
+				EntertainerDTO entertainer = temporaryEntertainerService.getByStripeConnectedAccount(account.getId());
+				EntertainerEntity ee =  entertainerMapper.dtoToEntity(entertainer);
+				ee.setId(entertainer.getEntertainerId());
+				entertainerService.update(ee);
+				temporaryEntertainerService.removeByStripeConnectedAccount(account.getId());
 			}
-			
+
 			break;
 		default:
 			break;
@@ -147,8 +156,7 @@ public class EntertainerController {
 
 		return ResponseEntity.ok().build();
 	}
-	
-	
+
 	@GetMapping("/all")
 	public List<EntertainerDTO> getAll(EntertainerDTO category) {
 		return entertainerService.getAll();

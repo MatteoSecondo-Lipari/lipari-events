@@ -10,7 +10,9 @@ public interface CustomerService {
 	public CustomerDTO createOrUpdateCustomer(CustomerConstraintsDTO customer);
 	
 	public List<CustomerDTO> getAllCustomers();
-	public CustomerDTO getCustomerById();
+	public CustomerDTO getCustomerById(long id);
 	
 	public CustomerDTO getCustomerByEmail(String email);
+	
+	public boolean deleteCustomer(long id);
 }

@@ -11,12 +11,16 @@ import lombok.NoArgsConstructor;
 public class EntertainerDTO {
 
 	private long id;
+	
+	private long entertainerId;
 
 	private String stageName;
 	
 	private String stripe_connected_account;
 	
 	private String type;
+	
+	private String stripeConnectedAccount;
 	
 	private UserDTO user;
 

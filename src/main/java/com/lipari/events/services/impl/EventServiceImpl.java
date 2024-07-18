@@ -38,7 +38,7 @@ public class EventServiceImpl implements EventService {
 	EntertainerMapper entertainerMapper;
 
 	@Override
-	public EventDTO createEvent(EventConstraintsDTO event, String imagePath) {
+	public EventDTO createOrUpdateEvent(EventConstraintsDTO event, String imagePath) {
 		EventEntity ee = eventMapper.constraintsDtoToEntity(event);
 
 		if(imagePath != null) {
@@ -49,9 +49,9 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<EventDTO> getAllEvents() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<EventWithSubcategoryWithoutloopDTO> getAllEvents() {
+		return eventRepository.findAll()
+				.stream().map(eventMapper::entityToEventWithSubcategoryWithoutLoopToDto).toList();
 	}
 
 	@Override
@@ -60,16 +60,21 @@ public class EventServiceImpl implements EventService {
 	}
 	
 	@Override
+	public EventWithSubcategoryWithoutloopDTO getEventWithSubcategoryWithoutloopDTOById(long id) {
+		return eventMapper.entityToEventWithSubcategoryWithoutLoopToDto(eventRepository.findById(id).orElse(null));
+	}
+	
+	@Override
 	public List<EventWithSubcategoryWithoutloopDTO> getEventWithName(String name) {
 		return eventRepository.findEventByNameStartingWith(name).stream()
-				.map(eventMapper::EntitySearchWithoutLooptoDto).toList();
+				.map(eventMapper::entityToEventWithSubcategoryWithoutLoopToDto).toList();
 	}
 	
 
 	@Override
 	public List<EventWithSubcategoryWithoutloopDTO> getTop20newestEvents(){
 		return eventRepository.findTop20ByDateOrderDesc().stream()
-				.map(eventMapper::EntitySearchWithoutLooptoDto).toList();
+				.map(eventMapper::entityToEventWithSubcategoryWithoutLoopToDto).toList();
 	}
 
 	@Override
@@ -86,6 +91,17 @@ public class EventServiceImpl implements EventService {
 			 }
 		}
 		
+		return true;
+	}
+
+	@Override
+	public boolean deleteEvent(long id) {
+		
+		if(!eventRepository.existsById(id)) {
+			return false;
+		}
+		
+		eventRepository.deleteById(id);
 		return true;
 	}
 

@@ -23,7 +23,7 @@ public interface EventMapper {
 	
 	public EventEntity dtoWithoutSubcategoryToEntity(EventWithoutSubcategoryDTO dto);
 	
-	public EventWithSubcategoryWithoutloopDTO EntitySearchWithoutLooptoDto(EventEntity entity);
+	public EventWithSubcategoryWithoutloopDTO entityToEventWithSubcategoryWithoutLoopToDto(EventEntity entity);
 	
-	public EventEntity DtoSearchWithoutLooptoEntity (EventWithSubcategoryWithoutloopDTO dto);
+	public EventEntity EventWithSubcategoryWithoutLoopDtoToEntity (EventWithSubcategoryWithoutloopDTO dto);
 }

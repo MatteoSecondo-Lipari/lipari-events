@@ -11,7 +11,7 @@ public class EventsEntertainersDTO {
 
 	private long id;
 	
-	private EventDTO event;
+	private EventWithSubcategoryWithoutloopDTO event;
 	
 	private EntertainerDTO entertainer;
 	

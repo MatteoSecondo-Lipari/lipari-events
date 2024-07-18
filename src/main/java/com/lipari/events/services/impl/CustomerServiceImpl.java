@@ -26,17 +26,17 @@ public class CustomerServiceImpl implements CustomerService {
 		CustomerEntity ce = customerMapper.constraintsDtoToEntity(customer);
 		return customerMapper.entityToDto(customerRepository.save(ce));
 	}
-
+	
 	@Override
 	public List<CustomerDTO> getAllCustomers() {
-		// TODO Auto-generated method stub
-		return null;
+		return customerRepository.findAll()
+				.stream().map(customerMapper::entityToDto).toList();
 	}
 
 	@Override
-	public CustomerDTO getCustomerById() {
-		// TODO Auto-generated method stub
-		return null;
+	public CustomerDTO getCustomerById(long id) {
+		return customerMapper.entityToDto(
+				customerRepository.findById(id).orElse(null));
 	}
 
 	
@@ -45,4 +45,16 @@ public class CustomerServiceImpl implements CustomerService {
 	    CustomerEntity customerEntity = customerRepository.findByUserEmail(email);
 	    return customerMapper.entityToDto(customerEntity);
 	}
+
+	@Override
+	public boolean deleteCustomer(long id) {
+		
+		if(!customerRepository.existsById(id)) {
+			return false;
+		}
+		
+		customerRepository.deleteById(id);
+		return true;
+	}
+	
 }
