@@ -1,13 +1,16 @@
 package com.lipari.events.services.impl;
 
 import java.util.List;
-
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lipari.events.entities.EventCategoryEntity;
+import com.lipari.events.entities.LocationEntity;
 import com.lipari.events.mappers.LocationMapper;
 import com.lipari.events.models.EventDTO;
+import com.lipari.events.models.LocationDTO;
 import com.lipari.events.models.LocationSeatsDTO;
 import com.lipari.events.models.LocationWithEventsDTO;
 import com.lipari.events.models.SeatDTO;
@@ -50,7 +53,7 @@ public class LocationServiceImpl implements LocationService{
 	  
 	    EventDTO event = eventService.getEventDTOById(eventId);
 
-	    long locationId = event.getLocation().getId();
+	    int locationId = event.getLocation().getId();
 
 	    // Per prendere tutti i seat dispinibili per quell'evento.
 	    List<LocationSeatsDTO> locationSeatsDTOs = locationRepository.findById(locationId)
@@ -75,6 +78,31 @@ public class LocationServiceImpl implements LocationService{
 	    }
 
 	    return locationSeatsDTOs;
+	}
+
+	@Override
+	public LocationDTO createOrUpdate(LocationEntity location) {
+		LocationEntity addlocations = locationRepository.save(location);
+		return locationMapper.entityToDto(addlocations);
+	}
+
+	@Override
+	public LocationDTO getById(int id) {
+	    return locationRepository.findById(id).map(locationMapper::entityToDto).orElseThrow();
+	}
+
+	@Override
+	public boolean delete(int id) {
+		LocationEntity searchLocation = locationRepository.findById(id).orElseThrow();
+		if(searchLocation != null)
+		{
+			locationRepository.deleteById(id);
+			return true;
+		}
+		else {
+			return false;
+		}
+		
 	}
 
 

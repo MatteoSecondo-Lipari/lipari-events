@@ -30,7 +30,6 @@ public class EventCategoryEntity {
 	@NotBlank(message = "Must be not null must and contain at least one non-whitespace character")
 	private String name;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	@JoinColumn(name = "category_id", nullable = false)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "category")
 	private List<EventSubcategoryEntity> subcategories;
 }

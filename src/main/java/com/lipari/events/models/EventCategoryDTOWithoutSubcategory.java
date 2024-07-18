@@ -1,17 +1,17 @@
 package com.lipari.events.models;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SeatDTO {
+public class EventCategoryDTOWithoutSubcategory {
 
 	private int id;
 	
-	private String number;
+	private String name;
+	
 }
