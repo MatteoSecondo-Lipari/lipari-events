@@ -136,7 +136,7 @@ public class EventController {
 					new MessageResponse("Only JPEG and JPG files are allowed", HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()));
 		}
 
-		EventDTO newEvent =  eventService.createOrUpdateEvent(event, path);
+		EventWithSubcategoryWithoutloopDTO newEvent =  eventService.createOrUpdateEvent(event, path);
 
 		//associate entertainers to this new event
 		event.getEntertainers().forEach(e ->
@@ -203,7 +203,7 @@ public class EventController {
 	
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("/update")
-	public EventDTO updateEvent(@RequestBody EventConstraintsDTO event) {
+	public EventWithSubcategoryWithoutloopDTO updateEvent(@RequestBody EventConstraintsDTO event) {
 		return eventService.createOrUpdateEvent(event, null);
 	}
 

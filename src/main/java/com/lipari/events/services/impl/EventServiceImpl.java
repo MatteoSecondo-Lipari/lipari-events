@@ -38,14 +38,14 @@ public class EventServiceImpl implements EventService {
 	EntertainerMapper entertainerMapper;
 
 	@Override
-	public EventDTO createOrUpdateEvent(EventConstraintsDTO event, String imagePath) {
+	public EventWithSubcategoryWithoutloopDTO createOrUpdateEvent(EventConstraintsDTO event, String imagePath) {
 		EventEntity ee = eventMapper.constraintsDtoToEntity(event);
 
 		if(imagePath != null) {
 			ee.setImagePath(imagePath);
 		}
 
-		return eventMapper.entityToDto(eventRepository.save(ee));
+		return eventMapper.entityToEventWithSubcategoryWithoutLoopToDto(eventRepository.save(ee));
 	}
 
 	@Override

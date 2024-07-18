@@ -174,8 +174,16 @@ public class EntertainerController {
 	
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("/update")
-	public EntertainerDTO update(@RequestBody EntertainerEntity events) {
-		return entertainerService.update(events);
+	public ResponseEntity<?> update(@RequestBody EntertainerEntity entertainer) {
+		
+		EntertainerDTO e = entertainerService.update(entertainer);
+		
+		if(e == null)
+		{
+			return ResponseEntity.status(404).body(new MessageResponse("No entertainer found", 404));
+		}
+		return ResponseEntity.ok(e);
+			
 	}
 	
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")

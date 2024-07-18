@@ -29,7 +29,7 @@ public class SeatController {
 	SeatService seatService;
 	
 	 
-
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@GetMapping("/all")
 	public List<SeatDTO> getAll() {
 		return seatService.getAll();
@@ -42,6 +42,7 @@ public class SeatController {
 	}
 	
 	// READ
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@GetMapping("/get/{id}")
 	public ResponseEntity<?> getById(@PathVariable int id) {
 		try {
