@@ -20,6 +20,8 @@ public class TicketConstraintsDTO {
 	
 	private LocalDate purchaseDate;
 	
+	private String stripeTransferGroup;
+	
 	private SeatDTO seat;
 	
 	@NotNull(message = "Must not be null")

@@ -69,7 +69,18 @@ public class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public boolean saveAll(List<TicketConstraintsDTO> tickets) {
+	public boolean saveAll(List<TicketDTO> tickets) {
+		List<TicketEntity> ticketsE =  ticketMapper.dtosToEntities(tickets);
+		
+		if(ticketRepository.saveAll(ticketsE) == null) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	@Override
+	public boolean saveAllConstrints(List<TicketConstraintsDTO> tickets) {
 		List<TicketEntity> ticketsE =  ticketMapper.constraintsDtosToEntities(tickets);
 		
 		if(ticketRepository.saveAll(ticketsE) == null) {

@@ -26,6 +26,7 @@ import com.lipari.events.mappers.CustomerMapper;
 import com.lipari.events.models.CustomerDTO;
 import com.lipari.events.models.ERole;
 import com.lipari.events.models.EventDTO;
+import com.lipari.events.models.TicketDTO;
 import com.lipari.events.models.TicketOrdersDTO;
 import com.lipari.events.models.TicketsEmptySeatDTO;
 import com.lipari.events.models.constraints.TicketConstraintsDTO;
@@ -35,6 +36,7 @@ import com.lipari.events.security.user_details.UserDetailsImpl;
 import com.lipari.events.services.CustomerService;
 import com.lipari.events.services.EventService;
 import com.lipari.events.services.StripeRequestsStorageService;
+import com.lipari.events.services.TemporaryTicketService;
 import com.lipari.events.services.TicketService;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
@@ -56,6 +58,9 @@ public class TicketController {
 
 	@Autowired
 	TicketService ticketService;
+	
+	@Autowired
+	TemporaryTicketService temporaryTicketService;
 	
 	@Autowired
 	EventService eventService;
@@ -118,10 +123,11 @@ public class TicketController {
 			});
 			
 			try {
-				String key = UUID.randomUUID().toString();
-				stripeRequestsStorageService.addTicketsToQueue(key, tickets);
+				String transferGroup = UUID.randomUUID().toString();
+				tickets.forEach(t -> t.setStripeTransferGroup(transferGroup));
+				temporaryTicketService.saveAll(tickets);
 				
-				return ResponseEntity.ok(ticketService.checkout(tickets, ticketPrice, key));
+				return ResponseEntity.ok(ticketService.checkout(tickets, ticketPrice, transferGroup));
 			} catch (StripeException e) {
 				return ResponseEntity.internalServerError().body(
 						new MessageResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
@@ -139,7 +145,7 @@ public class TicketController {
 				t.setCustomer(tickets.getFirst().getCustomer());
 			});
 			
-			if(!ticketService.saveAll(tickets)) {
+			if(!ticketService.saveAllConstrints(tickets)) {
 				return ResponseEntity.internalServerError().body(
 						new MessageResponse("Something went wrong saving tickets", HttpStatus.INTERNAL_SERVER_ERROR.value()));
 			}
@@ -176,23 +182,24 @@ public class TicketController {
 		case "payment_intent.succeeded":
 			PaymentIntent paymentIntent = (PaymentIntent) stripeObject;
 
-			String key = paymentIntent.getTransferGroup();
-			List<TicketConstraintsDTO> tickets = stripeRequestsStorageService.getTicketsFromQueue(key);
+			String transferGroup = paymentIntent.getTransferGroup();
+			List<TicketDTO> tickets = temporaryTicketService.getAllByStripeTransferGroup(transferGroup);
 			
+			tickets.forEach(t -> t.setId(0));
 			ticketService.saveAll(tickets);
 			
 			long eventId = tickets.getFirst().getEvent().getId();
 			EventEntity e =  eventService.getEventEntityById(eventId);
 			
 			try {
-				ticketService.transfers(e.getEventsEntertainers(), key, paymentIntent.getAmount());
+				ticketService.transfers(e.getEventsEntertainers(), transferGroup, paymentIntent.getAmount());
 			} catch (StripeException e1) {
 				System.out.println(e1.getMessage());
 				return ResponseEntity.internalServerError().body(
 						new MessageResponse(e1.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
 			}
 			
-			stripeRequestsStorageService.clearQueue(key);
+			temporaryTicketService.removeAllByTransferGroup(transferGroup);
 			break;
 		default:
 			break;

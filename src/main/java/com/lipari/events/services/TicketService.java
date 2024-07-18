@@ -13,7 +13,8 @@ import com.lipari.events.models.constraints.TicketConstraintsDTO;
 
 public interface TicketService {
 
-	public boolean saveAll(List<TicketConstraintsDTO> tickets);
+	public boolean saveAll(List<TicketDTO> tickets);
+	public boolean saveAllConstrints(List<TicketConstraintsDTO> tickets);
 	public TicketDTO updateTicket(TicketConstraintsDTO ticket);
 	
 	public String checkout(List<TicketConstraintsDTO> tickets, long price, String transferGroup) throws StripeException;
