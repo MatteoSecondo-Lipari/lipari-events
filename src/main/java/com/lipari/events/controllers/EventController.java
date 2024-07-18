@@ -142,7 +142,7 @@ public class EventController {
 		event.getEntertainers().forEach(e ->
 		eventsEntertainersService.createOrUpdate(
 				new EventsEntertainersConstraintsDTO(newEvent, e, 100 / event.getEntertainers().size()))
-				);
+		);
 
 		return ResponseEntity.ok(newEvent);
 	}

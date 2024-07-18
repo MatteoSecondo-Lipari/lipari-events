@@ -32,7 +32,7 @@ public class TicketServiceImpl implements TicketService {
 	@Autowired
 	TicketMapper ticketMapper;
   
-  @Autowired 
+	@Autowired 
 	CustomerMapper customerMapper;
 
 	@Override

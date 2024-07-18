@@ -71,7 +71,7 @@ public class EntertainerController {
 		return statistics;
 	}
 
-	
+	//connecting bank account to entertainer account
 	@GetMapping("/onboarding")
 	public ResponseEntity<?> onboarding() {
 
@@ -101,6 +101,7 @@ public class EntertainerController {
 		}
 	}
 
+	//saving stripe account into entertainer account
 	@PostMapping("/onboarding-webhook")
 	public ResponseEntity<?> saveTicketsAndDoTrasfers(
 			@RequestHeader("Stripe-Signature") String stripeSignature,

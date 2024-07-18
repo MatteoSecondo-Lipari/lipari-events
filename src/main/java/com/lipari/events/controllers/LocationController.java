@@ -21,11 +21,13 @@ public class LocationController{
 	@Autowired
 	LocationService locationService;
 	
+	//get all events for each location
 	@GetMapping("/all")
 	public List<LocationWithEventsDTO> getAllLocation(LocationDTO l){
 		return locationService.getAllLocation();
 	}
 	
+	//get all available seats for an event
 	@GetMapping("/seats/{event}")
 	public List<LocationSeatsDTO> getSeats(@PathVariable long event){
 		return locationService.getAvailableSeatsForEvent(event);

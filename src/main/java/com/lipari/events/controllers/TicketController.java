@@ -69,6 +69,7 @@ public class TicketController {
 	@Autowired
 	StripeRequestsStorageService stripeRequestsStorageService;
 
+	//purchase tickets
 	@PreAuthorize("hasAnyRole('ROLE_CUSTOMER', 'ROLE_ADMIN')")
 	@PostMapping("/checkout")
 	public ResponseEntity<?> purchaseAndCreate(@RequestBody List<@Valid TicketConstraintsDTO> tickets) {
@@ -147,6 +148,7 @@ public class TicketController {
 		}
 	}
 
+	//saving tickets in database and transfer amount to entertainers
 	@PostMapping("/checkout-webhook")
 	public ResponseEntity<?> saveTicketsAndDoTrasfers(
 			@RequestHeader("Stripe-Signature") String stripeSignature,
@@ -199,6 +201,7 @@ public class TicketController {
 		return ResponseEntity.ok().build();
 	}
 	
+	//get all tickets purchased by a customer
 	@GetMapping("/orders")
 	public List<TicketOrdersDTO> Orders() {
 		UserDetailsImpl userDetailsImpl = (UserDetailsImpl)SecurityContextHolder.getContext().

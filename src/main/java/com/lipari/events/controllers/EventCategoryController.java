@@ -17,10 +17,10 @@ public class EventCategoryController {
 	@Autowired
 	EventCategoryService categoryService;
 
+	//get all events for each category
 	@GetMapping("/all-events")
 	public List<EventCategoryDTO> getMethodName(EventCategoryDTO category) {
 		return categoryService.getAll();
 	}
-	
 	
 }
