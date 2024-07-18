@@ -39,8 +39,8 @@ public class EventSubcategoryServiceImpl implements EventSubcategoryService {
 	}
 
 	@Override
-	public Optional<EventSubcategoryDTOwithCategoryidDTO> getById(int id) {
-		return eventSubcategoryRepository.findById(id).map(eventSubcategoryMapper::entityToDtowithCategoryidDTO);
+	public EventSubcategoryDTOwithCategoryidDTO getById(int id) {
+		return eventSubcategoryRepository.findById(id).map(eventSubcategoryMapper::entityToDtowithCategoryidDTO).orElseThrow();
 	}
 
 	@Override

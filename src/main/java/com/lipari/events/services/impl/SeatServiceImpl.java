@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lipari.events.entities.EventEntity;
+import com.lipari.events.entities.LocationEntity;
 import com.lipari.events.entities.SeatEntity;
 import com.lipari.events.mappers.EntertainerMapper;
 import com.lipari.events.mappers.EventMapper;
@@ -45,13 +46,13 @@ public class SeatServiceImpl implements SeatService {
 
 	@Override
 	public SeatDTO getById(int id) {
-		return seatMapper.entityToDto(seatRepository.findById(id));
+		return seatRepository.findById(id).map(seatMapper::entityToDto).orElseThrow();
 				
 	}
 
 	@Override
 	public boolean delete(int id) {
-		SeatDTO seat = seatMapper.entityToDto(seatRepository.findById(id));
+		SeatEntity seat = seatRepository.findById(id).orElseThrow();
 		if(seat != null)
 		{
 			seatRepository.deleteById(id);

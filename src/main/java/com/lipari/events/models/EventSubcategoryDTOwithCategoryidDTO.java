@@ -13,6 +13,7 @@ public class EventSubcategoryDTOwithCategoryidDTO {
 
     private int id;
     private String name;
+    private EventCategoryDTOWithoutSubcategory category; 
     private List<EventWithoutSubcategoryDTO> events;
-    private int categoryId;  // Aggiungi questo campo
+    
 }

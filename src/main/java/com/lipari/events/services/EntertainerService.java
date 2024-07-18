@@ -29,7 +29,7 @@ public interface EntertainerService {
 	//CRUD
 	public List<EntertainerDTO> getAll();
 	public EntertainerDTO createEntertainer(EntertainerConstraintsDTO entertainer);
-	public Optional<EntertainerDTO> getById(long id);
+	public EntertainerDTO getById(long id);
 	public EntertainerDTO update(EntertainerEntity events);
 	public boolean delete(long id);
 

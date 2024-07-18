@@ -12,8 +12,4 @@ import com.lipari.events.models.LocationWithEventsDTO;
 @Repository
 public interface LocationRepository extends JpaRepository<LocationEntity, Integer> {
 
-	List<LocationEntity> findById(long id);
-	
-
-	LocationEntity findById(int id);
 }

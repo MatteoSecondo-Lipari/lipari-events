@@ -53,7 +53,7 @@ public class LocationServiceImpl implements LocationService{
 	  
 	    EventDTO event = eventService.getEventDTOById(eventId);
 
-	    long locationId = event.getLocation().getId();
+	    int locationId = event.getLocation().getId();
 
 	    // Per prendere tutti i seat dispinibili per quell'evento.
 	    List<LocationSeatsDTO> locationSeatsDTOs = locationRepository.findById(locationId)
@@ -88,17 +88,12 @@ public class LocationServiceImpl implements LocationService{
 
 	@Override
 	public LocationDTO getById(int id) {
-	    LocationEntity searchLocation = locationRepository.findById(id);
-	    if (searchLocation != null) {
-	        return locationMapper.entityToDto(searchLocation);
-	    } else {
-	        return null;
-	    }
+	    return locationRepository.findById(id).map(locationMapper::entityToDto).orElseThrow();
 	}
 
 	@Override
 	public boolean delete(int id) {
-		LocationEntity searchLocation = locationRepository.findById(id);
+		LocationEntity searchLocation = locationRepository.findById(id).orElseThrow();
 		if(searchLocation != null)
 		{
 			locationRepository.deleteById(id);

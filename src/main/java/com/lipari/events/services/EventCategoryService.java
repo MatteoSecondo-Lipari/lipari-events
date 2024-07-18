@@ -17,7 +17,7 @@ public interface EventCategoryService {
 	public EventCategoryDTO create(EventCategoryEntity events);
 	// READ
 	
-	public Optional<EventCategoryDTO> getById(int id);
+	public EventCategoryDTO getById(int id);
 	
 	// UPDATE 
 	

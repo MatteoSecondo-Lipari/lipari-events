@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lipari.events.entities.EntertainerEntity;
+import com.lipari.events.entities.LocationEntity;
 import com.lipari.events.mappers.EntertainerMapper;
 import com.lipari.events.models.EntertainerDTO;
 import com.lipari.events.models.EntertainerNNEventsDTO;
@@ -109,8 +110,8 @@ public class EntertainerServiceImpl implements EntertainerService {
 
 
 	@Override
-	public Optional<EntertainerDTO> getById(long id) {
-		return entertainerRepository.findById(id).map(entertainerMapper::entityToDto);
+	public EntertainerDTO getById(long id) {
+		return entertainerRepository.findById(id).map(entertainerMapper::entityToDto).orElseThrow();
 		
 	}
 
@@ -129,7 +130,8 @@ public class EntertainerServiceImpl implements EntertainerService {
 
 	@Override
 	public boolean delete(long id) {
-		if(entertainerRepository.existsById(id))
+		EntertainerEntity entity = entertainerRepository.findById(id).orElseThrow();
+		if(entity != null)
 		{
 			entertainerRepository.deleteById(id);
 			return true;

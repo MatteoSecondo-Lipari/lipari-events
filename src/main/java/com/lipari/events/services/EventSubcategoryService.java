@@ -11,7 +11,7 @@ public interface EventSubcategoryService {
 	public EventSubcategoryDTOwithCategoryidDTO createOrUpdate(EventSubcategoryDTOwithCategoryidDTO subcategory);
 	
 	public List<EventSubcategoryDTOwithCategoryidDTO> getAll();
-	public Optional<EventSubcategoryDTOwithCategoryidDTO> getById(int id);
+	public EventSubcategoryDTOwithCategoryidDTO getById(int id);
 	public boolean delete(int id);
 
 }

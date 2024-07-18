@@ -46,6 +46,4 @@ public interface EntertainerRepository extends JpaRepository<EntertainerEntity, 
             "GROUP BY " +
             "    events.id", nativeQuery = true)
     List<Object[]> getEventStatistics(long entertainerId); // Cambiato il nome del parametro per riflettere :entertainerId
-    
-    Optional<EntertainerEntity> findById(long id);
 }

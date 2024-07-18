@@ -14,5 +14,5 @@ import com.lipari.events.entities.SeatEntity;
 public interface SeatRepository extends JpaRepository<SeatEntity, Integer> {
 
 
-	SeatEntity findById(int id);
+
 }
