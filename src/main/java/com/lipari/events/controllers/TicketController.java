@@ -35,7 +35,6 @@ import com.lipari.events.repositories.UserRepository;
 import com.lipari.events.security.user_details.UserDetailsImpl;
 import com.lipari.events.services.CustomerService;
 import com.lipari.events.services.EventService;
-import com.lipari.events.services.StripeRequestsStorageService;
 import com.lipari.events.services.TemporaryTicketService;
 import com.lipari.events.services.TicketService;
 import com.stripe.exception.SignatureVerificationException;
@@ -70,9 +69,6 @@ public class TicketController {
 	
 	@Autowired
 	CustomerMapper customerMapper;
-
-	@Autowired
-	StripeRequestsStorageService stripeRequestsStorageService;
 
 	//purchase tickets
 	@PreAuthorize("hasAnyRole('ROLE_CUSTOMER', 'ROLE_ADMIN')")

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lipari.events.entities.EntertainerEntity;
+import com.lipari.events.mappers.EntertainerMapper;
 import com.lipari.events.models.EntertainerDTO;
 
 import com.lipari.events.models.EventStatsDashboardDTO;
@@ -28,7 +29,7 @@ import com.lipari.events.repositories.UserRepository;
 
 import com.lipari.events.security.user_details.UserDetailsImpl;
 import com.lipari.events.services.EntertainerService;
-import com.lipari.events.services.StripeRequestsStorageService;
+import com.lipari.events.services.TemporaryEntertainerService;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Account;
@@ -48,10 +49,13 @@ public class EntertainerController {
 
 	@Autowired
 	EntertainerService entertainerService;
-
-	@Autowired
-	StripeRequestsStorageService stripeRequestsStorageService;
 	
+	@Autowired
+	TemporaryEntertainerService temporaryEntertainerService;
+	
+	@Autowired
+	EntertainerMapper entertainerMapper;
+
 	@GetMapping("/stage-name/{name}")
 	public List<EntertainerDTO> getMethodName(@PathVariable String name) {
 		return entertainerService.getEntertainerByStageName(name);
@@ -92,7 +96,10 @@ public class EntertainerController {
 			Account account = entertainerService.createStripeAccount();
 			AccountLink accountLink = entertainerService.linkToOnboarding(account.getId());
 
-			stripeRequestsStorageService.addEntertainer(account.getId(), entertainer);
+			EntertainerDTO e = entertainerMapper.entityToDto(entertainer);
+			e.setStripeConnectedAccount(account.getId());
+			e.setEntertainerId(entertainer.getId());
+			temporaryEntertainerService.save(e);
 
 			return ResponseEntity.ok(accountLink.toJson());
 		} catch (StripeException e) {
@@ -129,12 +136,13 @@ public class EntertainerController {
 		case "account.updated":
 			Account account = (Account)stripeObject;
 
-			if(account.getCapabilities().getTransfers().equals("active")) {
+			if(account.getDetailsSubmitted() == true) {
 				//acount onboarding success, save stripe account here in entertainer table				
-				EntertainerEntity entertainer = stripeRequestsStorageService.getEntertainer(account.getId());
-
-				entertainer.setStripeConnectedAccount(account.getId());
-				entertainerService.updateEntertainer(entertainer);
+				EntertainerDTO entertainer = temporaryEntertainerService.getByStripeConnectedAccount(account.getId());
+				EntertainerEntity ee =  entertainerMapper.dtoToEntity(entertainer);
+				ee.setId(entertainer.getEntertainerId());
+				entertainerService.updateEntertainer(ee);
+				temporaryEntertainerService.removeByStripeConnectedAccount(account.getId());
 			}
 
 			break;
